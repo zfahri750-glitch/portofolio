@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio - Fah Rizal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        skybg: '#e0f2fe',
+                        skycard: '#ffffff',
+                        skyaccent: '#0284c7',
+                        skydark: '#0369a1',
+                        skytext: '#0f172a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #f0f9ff 100%);
+            background-attachment: fixed;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #0f172a;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 32px 0 rgba(14, 165, 233, 0.12);
+        }
+
+        .glass-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card-hover:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 40px 0 rgba(2, 132, 199, 0.22);
+            border-color: #38bdf8;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge-pulse {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(2, 132, 199, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(2, 132, 199, 0.8); }
+        }
+
+        /* Modal Animation */
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: scale(0.9);
+        }
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 left-0 right-0 z-40 px-4 py-4">
+        <div class="max-w-6xl mx-auto glass-card rounded-2xl px-6 py-3 flex justify-between items-center">
+            <a href="#" class="text-xl font-extrabold tracking-tight flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-sky-500 text-white flex items-center justify-center text-sm shadow-md">
+                    <i class="fa-solid fa-microchip"></i>
+                </span>
+                <span class="gradient-text">FAH RIZAL</span>
+            </a>
+            <div class="hidden md:flex gap-8 font-semibold text-sm text-sky-900">
+                <a href="#about" class="hover:text-sky-600 transition">Tentang</a>
+                <a href="#achievements" class="hover:text-sky-600 transition">Prestasi</a>
+                <a href="#tools" class="hover:text-sky-600 transition">Tools & Senjata</a>
+                <a href="#contact" class="hover:text-sky-600 transition">Kontak</a>
+            </div>
+            <a href="#contact" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold text-sm shadow-lg shadow-sky-500/30 hover:shadow-sky-500/50 hover:scale-105 transition">
+                Sapa Saya 👋
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="pt-36 pb-20 px-4">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-12 gap-8 items-center">
+            <div class="md:col-span-7 space-y-6 text-center md:text-left">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card badge-pulse text-sky-800 text-xs md:text-sm font-bold">
+                    <i class="fa-solid fa-award text-amber-500 text-base"></i>
+                    BSI Scholarship Awardee 2026
+                </div>
+                
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-slate-900">
+                    Membangun <span class="gradient-text">Robotik Cerdas</span> & Berjiwa Juara
+                </h1>
+                
+                <p class="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl">
+                    Hai, Saya <strong>Fah Rizal</strong>! Inovator di bidang Robotika & Otomasi, Atlet Badminton Nasional, serta Penerima Beasiswa BSI 2026 berbasis di Tangerang, Banten.
+                </p>
+
+                <div class="flex flex-wrap gap-4 justify-center md:justify-start pt-2">
+                    <a href="#achievements" class="px-6 py-3.5 rounded-xl bg-sky-600 text-white font-bold shadow-lg shadow-sky-600/30 hover:bg-sky-700 hover:scale-105 transition flex items-center gap-2">
+                        <i class="fa-solid fa-trophy"></i> Lihat 6 Prestasi Utama
+                    </a>
+                    <a href="#contact" class="px-6 py-3.5 rounded-xl glass-card text-sky-900 font-bold hover:bg-white/90 hover:scale-105 transition flex items-center gap-2 border border-sky-200">
+                        <i class="fa-solid fa-paper-plane"></i> Kirim Pesan
+                    </a>
+                </div>
+            </div>
+
+            <!-- FOTO PROFIL ANDA -->
+            <div class="md:col-span-5 flex justify-center">
+                <div class="relative w-72 h-80 sm:w-80 sm:h-96">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-sky-400 to-blue-600 rounded-3xl rotate-6 blur-lg opacity-40"></div>
+                    <div class="relative w-full h-full glass-card rounded-3xl p-3 flex flex-col justify-between overflow-hidden border-2 border-white shadow-2xl">
+                        <div class="relative w-full h-full rounded-2xl overflow-hidden bg-sky-900/10 flex items-center justify-center">
+                            <!-- object-contain agar foto profil tampil utuh -->
+                            <img src="profil.jpg" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80'" alt="Fah Rizal" class="w-full h-full object-contain">
+                            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent p-4 text-white">
+                                <h3 class="font-extrabold text-lg">Fah Rizal</h3>
+                                <p class="text-xs text-sky-200 flex items-center gap-1">
+                                    <i class="fa-solid fa-location-dot text-amber-400"></i> Tangerang, Banten
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PILAR UTAMA SECTION -->
+    <section id="about" class="py-12 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl glass-card-hover">
+                    <div class="w-12 h-12 rounded-xl bg-sky-500 text-white flex items-center justify-center text-xl mb-4 shadow-md">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Robotik & Inovasi</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Merancang hardware, C++, pemrograman mikrokontroler, serta algoritma line follower & robot inovasi tingkat nasional.
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl glass-card-hover">
+                    <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl mb-4 shadow-md">
+                        <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Badminton</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Mengasah ketangkasan, fokus, dan mental juara di lapangan hingga meraih podium 3 Tingkat Nasional.
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl glass-card-hover">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xl mb-4 shadow-md">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">BSI Scholar 2026</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Penerima BSI Scholarship Awardee 2026 yang aktif berdedikasi tinggi, berintegritas, dan berkontribusi nyata.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRESTASI SECTION (GALERI & KARTU) -->
+    <section id="achievements" class="py-16 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center space-y-3 mb-12">
+                <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-600">Rekam Jejak & Kejuaraan</h2>
+                <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-800">Prestasi Pilihan Fah Rizal</h3>
+                <p class="text-slate-600 text-sm sm:text-base">Klik pada kartu untuk melihat detail dokumentasi foto & sertifikat resmi.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="achievement-grid">
+                <!-- Cards generated via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- TOOLS & SENJATA UTAMA -->
+    <section id="tools" class="py-16 px-4">
+        <div class="max-w-6xl mx-auto space-y-12">
+            <div class="text-center space-y-3">
+                <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-600">Keahlian & Perlengkapan</h2>
+                <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-800">Tools Andalan & Senjata Utama</h3>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Tools -->
+                <div class="glass-card p-8 rounded-3xl space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </div>
+                        <h4 class="text-xl font-extrabold text-slate-800">Tools Andalan</h4>
+                    </div>
+                    <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 text-center">
+                        <div class="bg-white/80 p-3 rounded-2xl border border-sky-100 shadow-sm">
+                            <i class="fa-solid fa-code text-sky-600 text-xl mb-1 block"></i>
+                            <span class="text-xs font-bold text-slate-700">C++</span>
+                        </div>
+                        <div class="bg-white/80 p-3 rounded-2xl border border-sky-100 shadow-sm">
+                            <i class="fa-brands fa-python text-blue-600 text-xl mb-1 block"></i>
+                            <span class="text-xs font-bold text-slate-700">Python</span>
+                        </div>
+                        <div class="bg-white/80 p-3 rounded-2xl border border-sky-100 shadow-sm">
+                            <i class="fa-solid fa-microchip text-emerald-600 text-xl mb-1 block"></i>
+                            <span class="text-xs font-bold text-slate-700">Arduino</span>
+                        </div>
+                        <div class="bg-white/80 p-3 rounded-2xl border border-sky-100 shadow-sm">
+                            <i class="fa-solid fa-wifi text-amber-600 text-xl mb-1 block"></i>
+                            <span class="text-xs font-bold text-slate-700">ESP32</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Senjata Utama -->
+                <div class="glass-card p-8 rounded-3xl space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h4 class="text-xl font-extrabold text-slate-800">Senjata Utama</h4>
+                    </div>
+                    <ul class="space-y-3 text-sm text-slate-700 font-semibold">
+                        <li class="flex items-center gap-3 bg-white/70 p-3 rounded-xl border border-sky-100">
+                            <i class="fa-solid fa-circle-check text-sky-600"></i> Prototyping Robotik & Sistem Otomasi Cepat
+                        </li>
+                        <li class="flex items-center gap-3 bg-white/70 p-3 rounded-xl border border-sky-100">
+                            <i class="fa-solid fa-circle-check text-sky-600"></i> Algoritma PID & Navigasi Line Follower Presisi
+                        </li>
+                        <li class="flex items-center gap-3 bg-white/70 p-3 rounded-xl border border-sky-100">
+                            <i class="fa-solid fa-circle-check text-sky-600"></i> Strategi Refleks & Smash Badminton
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORM KONTAK / KIRIM PESAN LANGSUNG KE WA FAH RIZAL -->
+    <section id="contact" class="py-16 px-4 mb-12">
+        <div class="max-w-4xl mx-auto glass-card rounded-3xl p-8 sm:p-12 border-2 border-white relative overflow-hidden">
+            <div class="text-center space-y-3 mb-8">
+                <div class="w-12 h-12 mx-auto rounded-2xl bg-sky-500 text-white flex items-center justify-center text-xl shadow-lg">
+                    <i class="fa-solid fa-comments"></i>
+                </div>
+                <h3 class="text-3xl font-extrabold text-slate-800">Sapa Fah Rizal</h3>
+                <p class="text-slate-600 text-sm sm:text-base max-w-xl mx-auto">
+                    Kirim pesan langsung ke WhatsApp atau Email saya.
+                </p>
+            </div>
+
+            <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nama Anda</label>
+                        <input type="text" id="sender-name" required placeholder="Masukkan nama Anda" class="w-full px-4 py-3 rounded-xl bg-white/80 border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Topik Pesan</label>
+                        <select id="message-topic" class="w-full px-4 py-3 rounded-xl bg-white/80 border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                            <option value="Proyek Robotik">Proyek Robotik / Otomasi</option>
+                            <option value="Badminton">Badminton / Pertandingan</option>
+                            <option value="Diskusi BSI Scholar">Diskusi BSI Scholarship</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Isi Pesan</label>
+                    <textarea id="sender-message" required rows="4" placeholder="Tuliskan pesan Anda di sini..." class="w-full px-4 py-3 rounded-xl bg-white/80 border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"></textarea>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button type="submit" name="channel" value="wa" class="flex-1 py-3.5 rounded-xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 transition flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Kirim via WhatsApp
+                    </button>
+                    <button type="submit" name="channel" value="email" class="flex-1 py-3.5 rounded-xl bg-sky-600 text-white font-bold text-sm hover:bg-sky-700 transition flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-envelope text-lg"></i> Kirim via Email
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-8 text-center text-xs text-slate-500">
+        <p>© 2026 Fah Rizal. Didesain khusus dengan tema Biru Muda Modern.</p>
+    </footer>
+
+    <!-- MODAL POPUP PRESTASI & SERTIFIKAT -->
+    <div id="achievement-modal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+        <div class="modal-content glass-card max-w-3xl w-full rounded-3xl p-6 sm:p-8 relative bg-white/95 shadow-2xl border-2 border-white max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-body" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DATA PRESTASI FAH RIZAL
+        const achievementsData = [
+            {
+                id: 1,
+                title: "Lomba Robotic Innovation IRIC 2026",
+                rank: "Juara 1",
+                level: "Tingkat Nasional",
+                year: "2026",
+                icon: "fa-trophy text-amber-500",
+                badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+                shortDesc: "Juara 1 Nasional kategori Inovasi Robotik dalam ajang IRIC 2026.",
+                fullDesc: "Pada ajang International/National Robotic Innovation Competition (IRIC) 2026, Fah Rizal berhasil meraih Juara 1 Tingkat Nasional dengan proyek otomasi cerdas.",
+                dokPhoto: "dok-iric.jpg",
+                certPhoto: "sertifikat-iric.jpg"
+            },
+            {
+                id: 2,
+                title: "Lomba Robotic Innovation FTK VAGANZA AIROC 2026",
+                rank: "Juara 1",
+                level: "Tingkat Nasional",
+                year: "2026",
+                icon: "fa-medal text-amber-500",
+                badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+                shortDesc: "Juara 1 Tingkat Nasional dalam ajang FTK VAGANZA AIROC 2026.",
+                fullDesc: "Berkompetisi di FTK VAGANZA AIROC 2026 dengan inovasi robotika modern berakurasi tinggi.",
+                dokPhoto: "dok-airoc.jpg",
+                certPhoto: "sertifikat-airoc.jpg"
+            },
+            {
+                id: 3,
+                title: "Lomba Robotic Line Follower UIN Banten 2026",
+                rank: "Juara 1",
+                level: "Tingkat Provinsi Banten",
+                year: "2026",
+                icon: "fa-award text-sky-600",
+                badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+                shortDesc: "Juara 1 Robot Line Follower se-Provinsi Banten di UIN Banten.",
+                fullDesc: "Mengembangkan robot Line Follower berkecepatan tinggi dan membawa pulang gelar Juara 1 Provinsi Banten.",
+                dokPhoto: "dok-uin.jpg",
+                certPhoto: "sertifikat-uin.jpg"
+            },
+            {
+                id: 4,
+                title: "Lomba Badminton FLIGHT 236",
+                rank: "Juara 3",
+                level: "Tingkat Nasional",
+                year: "2026",
+                icon: "fa-table-tennis-paddle-ball text-blue-600",
+                badgeColor: "bg-blue-100 text-blue-800 border-blue-200",
+                shortDesc: "Podium 3 Tingkat Nasional pada kejuaraan badminton FLIGHT 236.",
+                fullDesc: "Menunjukkan performa terbaik di lapangan hingga meraih Juara 3 Nasional di kejuaraan FLIGHT 236.",
+                dokPhoto: "dok-badminton.jpg",
+                certPhoto: "sertifikat-badminton.jpg"
+            },
+            {
+                id: 5,
+                title: "MECHATRONICS DAY 2025",
+                rank: "Juara 2",
+                level: "Tingkat Nasional",
+                year: "2025",
+                icon: "fa-trophy text-slate-500",
+                badgeColor: "bg-slate-100 text-slate-800 border-slate-200",
+                shortDesc: "Juara 2 Tingkat Nasional kompetisi mekatronika Mechatronics Day.",
+                fullDesc: "Mengintegrasikan sistem mekanik, elektronik, dan kontrol C++ hingga meraih Juara 2 Nasional.",
+                dokPhoto: "dok-mechatronics.jpg",
+                certPhoto: "sertifikat-mechatronics.jpg"
+            },
+            {
+                id: 6,
+                title: "Line Follower FRC 2025",
+                rank: "Juara Harapan 1",
+                level: "Tingkat Kota Cilegon",
+                year: "2025",
+                icon: "fa-certificate text-sky-600",
+                badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+                shortDesc: "Juara Harapan 1 Line Follower FRC 2025 di Kota Cilegon.",
+                fullDesc: "Menguji algoritma PID line follower dan memperoleh gelar Juara Harapan 1 Kota Cilegon.",
+                dokPhoto: "dok-frc.jpg",
+                certPhoto: "sertifikat-frc.jpg"
+            }
+        ];
+
+        function renderAchievements() {
+            const container = document.getElementById('achievement-grid');
+            container.innerHTML = achievementsData.map(item => `
+                <div onclick="openModal(${item.id})" class="glass-card p-6 rounded-2xl glass-card-hover cursor-pointer flex flex-col justify-between border border-white">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold border ${item.badgeColor}">
+                                ${item.rank}
+                            </span>
+                            <span class="text-xs font-semibold text-slate-500">${item.year}</span>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-sky-100 flex items-center justify-center text-lg mb-3">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-800 text-lg mb-1 leading-snug">${item.title}</h4>
+                        <p class="text-xs font-bold text-sky-600 mb-3">${item.level}</p>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">${item.shortDesc}</p>
+                    </div>
+                    <div class="pt-3 border-t border-sky-100/60 flex items-center justify-between text-xs font-bold text-sky-700">
+                        <span>Buka Dokumentasi & Sertifikat</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openModal(id) {
+            const data = achievementsData.find(item => item.id === id);
+            if (!data) return;
+
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold border ${data.badgeColor}">
+                            ${data.rank} - ${data.level}
+                        </span>
+                        <span class="text-xs font-bold text-slate-400">• ${data.year}</span>
+                    </div>
+
+                    <h3 class="text-2xl font-extrabold text-slate-800">${data.title}</h3>
+
+                    <!-- GRID FOTO DOKUMENTASI & SERTIFIKAT UTUH (OBJECT-CONTAIN) -->
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="rounded-2xl overflow-hidden shadow border border-sky-100 bg-slate-900/10 p-2 flex flex-col items-center">
+                            <div class="w-full h-52 sm:h-60 flex items-center justify-center">
+                                <img src="${data.dokPhoto}" onerror="this.src='https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80'" class="max-w-full max-h-full object-contain rounded-lg">
+                            </div>
+                            <p class="text-center text-xs font-bold text-slate-700 mt-2 bg-white/80 w-full py-1 rounded-md">Foto Dokumentasi</p>
+                        </div>
+                        <div class="rounded-2xl overflow-hidden shadow border border-sky-100 bg-slate-900/10 p-2 flex flex-col items-center">
+                            <div class="w-full h-52 sm:h-60 flex items-center justify-center">
+                                <img src="${data.certPhoto}" onerror="this.src='https://images.unsplash.com/photo-1563968743333-044cef800494?auto=format&fit=crop&w=800&q=80'" class="max-w-full max-h-full object-contain rounded-lg">
+                            </div>
+                            <p class="text-center text-xs font-bold text-slate-700 mt-2 bg-white/80 w-full py-1 rounded-md">Foto Sertifikat</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-sky-50 p-4 rounded-xl border border-sky-100">
+                        <p class="text-slate-700 text-sm leading-relaxed">${data.fullDesc}</p>
+                    </div>
+
+                    <div class="pt-2 text-right">
+                        <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-sky-600 text-white font-bold text-sm hover:bg-sky-700 transition">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('achievement-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('achievement-modal').classList.remove('active');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('sender-name').value;
+            const topic = document.getElementById('message-topic').value;
+            const message = document.getElementById('sender-message').value;
+            const submitter = e.submitter ? e.submitter.value : 'wa';
+
+            const phoneNumber = "6289630236373"; 
+            const myEmail = "zfahri750@gmail.com";
+
+            if (submitter === 'wa') {
+                const text = `Halo Fah Rizal! Saya *${name}*.\n\n*Topik:* ${topic}\n*Pesan:* ${message}`;
+                const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
+                window.open(waUrl, '_blank');
+            } else {
+                const subject = `[Portofolio] ${topic} - dari ${name}`;
+                const body = `Halo Fah Rizal,\n\nSaya ${name}.\n\nTopik: ${topic}\n\nPesan:\n${message}`;
+                const mailtoUrl = `mailto:${myEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.location.href = mailtoUrl;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAchievements();
+        });
+    </script>
+</body>
+</html>
