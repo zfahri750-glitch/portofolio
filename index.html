@@ -90,6 +90,16 @@
             100% { transform: translateX(-50%); }
         }
 
+        /* SPLASH SCREEN OVERLAY */
+        #splash-screen {
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        #splash-screen.hidden-splash {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
         /* MODAL ANIMATION */
         .modal {
             transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -111,6 +121,32 @@
     <audio id="bg-music" loop>
         <source src="lagu-natal.mp3" type="audio/mpeg">
     </audio>
+
+    <!-- SPLASH SCREEN / KETUK UNTUK MASUK & PLAY MUSIK -->
+    <div id="splash-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95 backdrop-blur-2xl p-4">
+        <div class="glass-panel max-w-lg w-full rounded-3xl p-8 sm:p-10 text-center space-y-6 border-2 border-sky-400/50 shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl"></div>
+            
+            <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-tr from-amber-500 to-sky-500 border border-amber-300 flex items-center justify-center text-amber-100 text-3xl shadow-xl animate-bounce">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            
+            <div class="space-y-2">
+                <h2 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-wider">Portofolio Fah Rizal</h2>
+                <p class="text-slate-300 text-sm font-medium">Sistem 3D Cyber Interaktif & Otomasi Robotik</p>
+            </div>
+
+            <div class="bg-slate-900/80 p-4 rounded-2xl border border-sky-500/30 text-xs text-sky-300 font-semibold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-shield-halved text-amber-400"></i>
+                <span>Status: Aman • Pengunjung Terdeteksi Otomatis</span>
+            </div>
+
+            <button onclick="startPortfolio()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-extrabold text-base shadow-xl shadow-sky-500/40 hover:scale-105 transition duration-300 flex items-center justify-center gap-3">
+                <i class="fa-solid fa-play text-amber-300"></i> Ketuk untuk Masuk & Nyalakan Musik
+            </button>
+        </div>
+    </div>
 
     <!-- NAVBAR RESPONSIF -->
     <nav class="fixed top-0 left-0 right-0 z-40 px-4 py-4">
@@ -406,23 +442,17 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // OTOMATIS PUTAR MUSIK SAAT ADA INTERAKSI PERTAMA
-        function initAutoPlayMusic() {
+        // MASUK & UTAMA PEMUTARAN MUSIK
+        function startPortfolio() {
+            const splash = document.getElementById('splash-screen');
             const music = document.getElementById('bg-music');
-            if (!music) return;
             
-            music.volume = 0.5;
+            splash.classList.add('hidden-splash');
             
-            const startAudioOnInteraction = () => {
-                music.play().catch(e => console.log("Audio play blocked", e));
-                document.removeEventListener('click', startAudioOnInteraction);
-                document.removeEventListener('touchstart', startAudioOnInteraction);
-                document.removeEventListener('scroll', startAudioOnInteraction);
-            };
-
-            document.addEventListener('click', startAudioOnInteraction);
-            document.addEventListener('touchstart', startAudioOnInteraction);
-            document.addEventListener('scroll', startAudioOnInteraction);
+            if (music) {
+                music.volume = 0.5;
+                music.play().catch(err => console.log("Audio play error:", err));
+            }
         }
 
         // DETEKSI PENGUNJUNG OTOMATIS
@@ -719,7 +749,6 @@
             init3DBackground();
             renderAchievements();
             initVisitorDetection();
-            initAutoPlayMusic();
         });
     </script>
 </body>
