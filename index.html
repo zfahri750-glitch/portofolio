@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,21 +9,16 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts: Plus Jakarta Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Three.js Library for 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        skybg: '#e0f2fe',
-                        skycard: '#ffffff',
-                        skyaccent: '#0284c7',
-                        skydark: '#0369a1',
-                        skytext: '#0f172a',
                     }
                 }
             }
@@ -31,46 +26,82 @@
     </script>
     <style>
         body {
-            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #f0f9ff 100%);
-            background-attachment: fixed;
+            background-color: #030712;
+            color: #f8fafc;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #0f172a;
+            overflow-x: hidden;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
+        /* 3D CANVAS BACKGROUND */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* GLASSMORPHISM MODERN */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 8px 32px 0 rgba(14, 165, 233, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            box-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.3);
         }
 
         .glass-card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
         .glass-card-hover:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 20px 40px 0 rgba(2, 132, 199, 0.22);
+            transform: translateY(-8px) scale(1.02);
             border-color: #38bdf8;
+            box-shadow: 0 20px 40px -10px rgba(56, 189, 248, 0.4);
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+        /* NEON TEXT GLOW */
+        .neon-title {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
         }
 
-        .badge-pulse {
-            animation: pulse-glow 2s infinite;
+        /* GOLDEN BSI BADGE GLOW */
+        .bsi-badge {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid #f59e0b;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
         }
 
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 15px rgba(2, 132, 199, 0.4); }
-            50% { box-shadow: 0 0 25px rgba(2, 132, 199, 0.8); }
+        /* RUNNING MARQUEE ANIMATION */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
         }
 
-        /* Modal Animation */
+        /* SCROLL REVEAL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* MODAL ANIMATION */
         .modal {
             transition: opacity 0.3s ease, visibility 0.3s ease;
             opacity: 0;
@@ -80,76 +111,81 @@
             opacity: 1;
             visibility: visible;
         }
-        .modal-content {
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            transform: scale(0.9);
-        }
-        .modal.active .modal-content {
-            transform: scale(1);
-        }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen relative">
+
+    <!-- 3D WEBGL BACKGROUND CANVAS -->
+    <div id="canvas-container"></div>
+
+    <!-- AUDIO PLAYER (MEMUTAR LAGU 'lagu-natal.mp3') -->
+    <audio id="bg-music" loop autoplay>
+        <source src="lagu-natal.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- NAVBAR -->
-    <nav class="fixed top-0 left-0 right-0 z-40 px-4 py-4">
-        <div class="max-w-6xl mx-auto glass-card rounded-2xl px-6 py-3 flex justify-between items-center">
-            <a href="#" class="text-xl font-extrabold tracking-tight flex items-center gap-2">
-                <span class="w-8 h-8 rounded-xl bg-sky-500 text-white flex items-center justify-center text-sm shadow-md">
-                    <i class="fa-solid fa-microchip"></i>
+    <nav class="fixed top-0 left-0 right-0 z-50 px-4 py-5">
+        <div class="max-w-6xl mx-auto glass-panel rounded-full px-8 py-3.5 flex justify-between items-center">
+            <a href="#" class="text-xl font-extrabold tracking-wider flex items-center gap-3 text-sky-400">
+                <span class="w-9 h-9 rounded-xl bg-sky-500/20 border border-sky-400 flex items-center justify-center text-sky-300">
+                    <i class="fa-solid fa-robot"></i>
                 </span>
-                <span class="gradient-text">FAH RIZAL</span>
+                <span>FAH RIZAL</span>
             </a>
-            <div class="hidden md:flex gap-8 font-semibold text-sm text-sky-900">
-                <a href="#about" class="hover:text-sky-600 transition">Tentang</a>
-                <a href="#achievements" class="hover:text-sky-600 transition">Prestasi</a>
-                <a href="#tools" class="hover:text-sky-600 transition">Tools & Senjata</a>
-                <a href="#contact" class="hover:text-sky-600 transition">Kontak</a>
+            <div class="hidden md:flex gap-8 font-semibold text-sm text-slate-300">
+                <a href="#about" class="hover:text-sky-400 transition">Tentang</a>
+                <a href="#achievements" class="hover:text-sky-400 transition">Prestasi</a>
+                <a href="#tools" class="hover:text-sky-400 transition">Tools</a>
+                <a href="#contact" class="hover:text-sky-400 transition">Kontak</a>
             </div>
-            <a href="#contact" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold text-sm shadow-lg shadow-sky-500/30 hover:shadow-sky-500/50 hover:scale-105 transition">
+            <a href="#contact" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold text-sm shadow-lg shadow-sky-500/30 hover:scale-105 transition duration-300">
                 Sapa Saya 👋
             </a>
         </div>
     </nav>
 
     <!-- HERO SECTION -->
-    <section class="pt-36 pb-20 px-4">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-12 gap-8 items-center">
-            <div class="md:col-span-7 space-y-6 text-center md:text-left">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card badge-pulse text-sky-800 text-xs md:text-sm font-bold">
-                    <i class="fa-solid fa-award text-amber-500 text-base"></i>
-                    BSI Scholarship Awardee 2026
+    <section class="pt-44 pb-24 px-4 relative z-10">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-12 gap-12 items-center">
+            <div class="md:col-span-7 space-y-6 text-center md:text-left reveal active">
+                <!-- BADGE BSI SCHOLAR -->
+                <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bsi-badge text-amber-300 text-sm font-bold">
+                    <i class="fa-solid fa-award text-amber-400 text-lg"></i>
+                    BSI Scholar 2026
                 </div>
                 
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-slate-900">
-                    Berinovasi Lewat Teknologi, <span class="gradient-text">Berprestasi Lewat Aksi</span>
+                <!-- NEON TITLE -->
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black uppercase leading-tight tracking-tight neon-title">
+                    BERINOVASI LEWAT TEKNOLOGI,<br>
+                    BERPRESTASI LEWAT AKSI
                 </h1>
                 
-                <p class="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl">
-                    Hai, Saya <strong>Fah Rizal</strong>! Inovator di bidang Robotika & Otomasi, Atlet Badminton Nasional, serta Penerima Beasiswa BSI 2026 berbasis di Tangerang, Banten.
+                <p class="text-slate-300 text-base sm:text-lg leading-relaxed font-medium max-w-2xl">
+                    Hai, Saya <strong class="text-sky-400">Fah Rizal</strong>! Inovator di bidang Robotika & Otomasi, Atlet Badminton Nasional, serta Penerima Beasiswa BSI 2026 berbasis di Tangerang, Banten.
                 </p>
 
-                <div class="flex flex-wrap gap-4 justify-center md:justify-start pt-2">
-                    <a href="#achievements" class="px-6 py-3.5 rounded-xl bg-sky-600 text-white font-bold shadow-lg shadow-sky-600/30 hover:bg-sky-700 hover:scale-105 transition flex items-center gap-2">
+                <div class="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
+                    <a href="#achievements" class="px-8 py-4 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-extrabold shadow-xl shadow-sky-500/30 hover:scale-105 transition flex items-center gap-3">
                         <i class="fa-solid fa-trophy"></i> Lihat 6 Prestasi Utama
                     </a>
-                    <a href="#contact" class="px-6 py-3.5 rounded-xl glass-card text-sky-900 font-bold hover:bg-white/90 hover:scale-105 transition flex items-center gap-2 border border-sky-200">
+                    <a href="#contact" class="px-8 py-4 rounded-xl glass-panel text-slate-200 font-extrabold hover:bg-slate-800 transition flex items-center gap-3 border border-sky-500/30">
                         <i class="fa-solid fa-paper-plane"></i> Kirim Pesan
                     </a>
                 </div>
             </div>
 
-            <!-- FOTO PROFIL ANDA -->
-            <div class="md:col-span-5 flex justify-center">
-                <div class="relative w-72 h-80 sm:w-80 sm:h-96">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-sky-400 to-blue-600 rounded-3xl rotate-6 blur-lg opacity-40"></div>
-                    <div class="relative w-full h-full glass-card rounded-3xl p-3 flex flex-col justify-between overflow-hidden border-2 border-white shadow-2xl">
-                        <div class="relative w-full h-full rounded-2xl overflow-hidden bg-sky-900/10 flex items-center justify-center">
-                            <!-- object-contain agar foto profil tampil utuh -->
+            <!-- FOTO PROFIL DENGAN EFEK CYBER AURA -->
+            <div class="md:col-span-5 flex justify-center reveal active" style="transition-delay: 0.2s;">
+                <div class="relative w-72 h-80 sm:w-80 sm:h-[26rem]">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-sky-500 via-indigo-500 to-purple-600 rounded-3xl rotate-6 blur-2xl opacity-50 animate-pulse"></div>
+                    <div class="relative w-full h-full glass-panel rounded-3xl p-3 border-2 border-sky-400/50 shadow-2xl overflow-hidden flex flex-col justify-between">
+                        <div class="relative w-full h-full rounded-2xl overflow-hidden bg-slate-900 flex items-center justify-center">
                             <img src="profil.jpg" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80'" alt="Fah Rizal" class="w-full h-full object-contain">
-                            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent p-4 text-white">
-                                <h3 class="font-extrabold text-lg">Fah Rizal</h3>
-                                <p class="text-xs text-sky-200 flex items-center gap-1">
+                            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-4 text-white">
+                                <h3 class="font-extrabold text-lg flex items-center gap-2">
+                                    Fah Rizal <i class="fa-solid fa-circle-check text-sky-400 text-sm"></i>
+                                </h3>
+                                <p class="text-xs text-sky-300 flex items-center gap-1">
                                     <i class="fa-solid fa-location-dot text-amber-400"></i> Tangerang, Banten
                                 </p>
                             </div>
@@ -160,36 +196,53 @@
         </div>
     </section>
 
+    <!-- TECH MARQUEE BANNER -->
+    <div class="py-6 border-y border-sky-500/20 bg-slate-950/60 glass-panel relative z-10">
+        <div class="marquee-container">
+            <div class="marquee-content font-extrabold text-sm tracking-widest text-sky-300 uppercase space-x-12">
+                <span><i class="fa-solid fa-code text-sky-400"></i> C++ Programming</span>
+                <span><i class="fa-brands fa-python text-blue-400"></i> Python AI</span>
+                <span><i class="fa-solid fa-microchip text-emerald-400"></i> Arduino Robotics</span>
+                <span><i class="fa-solid fa-wifi text-amber-400"></i> ESP32 IoT</span>
+                <span><i class="fa-solid fa-gear text-purple-400"></i> Automation Control</span>
+                <span><i class="fa-solid fa-table-tennis-paddle-ball text-blue-400"></i> Badminton National Podium</span>
+                <span><i class="fa-solid fa-code text-sky-400"></i> C++ Programming</span>
+                <span><i class="fa-brands fa-python text-blue-400"></i> Python AI</span>
+                <span><i class="fa-solid fa-microchip text-emerald-400"></i> Arduino Robotics</span>
+            </div>
+        </div>
+    </div>
+
     <!-- PILAR UTAMA SECTION -->
-    <section id="about" class="py-12 px-4">
+    <section id="about" class="py-20 px-4 relative z-10">
         <div class="max-w-6xl mx-auto">
             <div class="grid md:grid-cols-3 gap-6">
-                <div class="glass-card p-6 rounded-2xl glass-card-hover">
-                    <div class="w-12 h-12 rounded-xl bg-sky-500 text-white flex items-center justify-center text-xl mb-4 shadow-md">
+                <div class="glass-panel p-8 rounded-3xl glass-card-hover reveal">
+                    <div class="w-14 h-14 rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-2xl mb-6 shadow-lg">
                         <i class="fa-solid fa-microchip"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-2">Robotik & Inovasi</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
+                    <h3 class="text-xl font-extrabold text-white mb-2">Robotik & Inovasi</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium">
                         Merancang hardware, C++, pemrograman mikrokontroler, serta algoritma line follower & robot inovasi tingkat nasional.
                     </p>
                 </div>
 
-                <div class="glass-card p-6 rounded-2xl glass-card-hover">
-                    <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl mb-4 shadow-md">
+                <div class="glass-panel p-8 rounded-3xl glass-card-hover reveal" style="transition-delay: 0.15s;">
+                    <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-400 text-indigo-400 flex items-center justify-center text-2xl mb-6 shadow-lg">
                         <i class="fa-solid fa-table-tennis-paddle-ball"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-2">Badminton</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
+                    <h3 class="text-xl font-extrabold text-white mb-2">Badminton</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium">
                         Mengasah ketangkasan, fokus, dan mental juara di lapangan hingga meraih podium 3 Tingkat Nasional.
                     </p>
                 </div>
 
-                <div class="glass-card p-6 rounded-2xl glass-card-hover">
-                    <div class="w-12 h-12 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xl mb-4 shadow-md">
+                <div class="glass-panel p-8 rounded-3xl glass-card-hover reveal" style="transition-delay: 0.3s;">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400 text-amber-400 flex items-center justify-center text-2xl mb-6 shadow-lg">
                         <i class="fa-solid fa-graduation-cap"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-2">BSI Scholar 2026</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
+                    <h3 class="text-xl font-extrabold text-white mb-2">BSI Scholar 2026</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium">
                         Penerima BSI Scholarship Awardee 2026 yang aktif berdedikasi tinggi, berintegritas, dan berkontribusi nyata.
                     </p>
                 </div>
@@ -197,13 +250,13 @@
         </div>
     </section>
 
-    <!-- PRESTASI SECTION (GALERI & KARTU) -->
-    <section id="achievements" class="py-16 px-4">
+    <!-- PRESTASI SECTION -->
+    <section id="achievements" class="py-20 px-4 relative z-10">
         <div class="max-w-6xl mx-auto">
-            <div class="text-center space-y-3 mb-12">
-                <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-600">Rekam Jejak & Kejuaraan</h2>
-                <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-800">Prestasi Pilihan Fah Rizal</h3>
-                <p class="text-slate-600 text-sm sm:text-base">Klik pada kartu untuk melihat detail dokumentasi foto & sertifikat resmi.</p>
+            <div class="text-center space-y-3 mb-16 reveal">
+                <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-400 bg-sky-500/10 px-4 py-1.5 rounded-full inline-block border border-sky-400/30">Rekam Jejak & Kejuaraan</h2>
+                <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Prestasi Pilihan Fah Rizal</h3>
+                <p class="text-slate-400 text-sm sm:text-base max-w-lg mx-auto">Klik pada kartu untuk melihat detail dokumentasi foto & sertifikat resmi.</p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="achievement-grid">
@@ -213,59 +266,59 @@
     </section>
 
     <!-- TOOLS & SENJATA UTAMA -->
-    <section id="tools" class="py-16 px-4">
+    <section id="tools" class="py-20 px-4 relative z-10">
         <div class="max-w-6xl mx-auto space-y-12">
-            <div class="text-center space-y-3">
-                <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-600">Keahlian & Perlengkapan</h2>
-                <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-800">Tools Andalan & Senjata Utama</h3>
+            <div class="text-center space-y-3 reveal">
+                <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-400 bg-sky-500/10 px-4 py-1.5 rounded-full inline-block border border-sky-400/30">Keahlian & Perlengkapan</h2>
+                <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Tools Andalan & Senjata Utama</h3>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
                 <!-- Tools -->
-                <div class="glass-card p-8 rounded-3xl space-y-6">
+                <div class="glass-panel p-8 rounded-3xl space-y-6 glass-card-hover reveal">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center text-lg">
+                        <div class="w-11 h-11 rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-xl shadow-md">
                             <i class="fa-solid fa-screwdriver-wrench"></i>
                         </div>
-                        <h4 class="text-xl font-extrabold text-slate-800">Tools Andalan</h4>
+                        <h4 class="text-xl font-extrabold text-white">Tools Andalan</h4>
                     </div>
-                    <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 text-center">
-                        <div class="bg-white/80 p-3 rounded-2xl border border-sky-100 shadow-sm">
-                            <i class="fa-solid fa-code text-sky-600 text-xl mb-1 block"></i>
-                            <span class="text-xs font-bold text-slate-700">C++</span>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                        <div class="bg-slate-900/80 p-4 rounded-2xl border border-sky-500/20 shadow-sm hover:scale-105 transition">
+                            <i class="fa-solid fa-code text-sky-400 text-2xl mb-2 block"></i>
+                            <span class="text-xs font-bold text-slate-200">C++</span>
                         </div>
-                        <div class="bg-white/80 p-3 rounded-2xl border border-sky-100 shadow-sm">
-                            <i class="fa-brands fa-python text-blue-600 text-xl mb-1 block"></i>
-                            <span class="text-xs font-bold text-slate-700">Python</span>
+                        <div class="bg-slate-900/80 p-4 rounded-2xl border border-sky-500/20 shadow-sm hover:scale-105 transition">
+                            <i class="fa-brands fa-python text-blue-400 text-2xl mb-2 block"></i>
+                            <span class="text-xs font-bold text-slate-200">Python</span>
                         </div>
-                        <div class="bg-white/80 p-3 rounded-2xl border border-sky-100 shadow-sm">
-                            <i class="fa-solid fa-microchip text-emerald-600 text-xl mb-1 block"></i>
-                            <span class="text-xs font-bold text-slate-700">Arduino</span>
+                        <div class="bg-slate-900/80 p-4 rounded-2xl border border-sky-500/20 shadow-sm hover:scale-105 transition">
+                            <i class="fa-solid fa-microchip text-emerald-400 text-2xl mb-2 block"></i>
+                            <span class="text-xs font-bold text-slate-200">Arduino</span>
                         </div>
-                        <div class="bg-white/80 p-3 rounded-2xl border border-sky-100 shadow-sm">
-                            <i class="fa-solid fa-wifi text-amber-600 text-xl mb-1 block"></i>
-                            <span class="text-xs font-bold text-slate-700">ESP32</span>
+                        <div class="bg-slate-900/80 p-4 rounded-2xl border border-sky-500/20 shadow-sm hover:scale-105 transition">
+                            <i class="fa-solid fa-wifi text-amber-400 text-2xl mb-2 block"></i>
+                            <span class="text-xs font-bold text-slate-200">ESP32</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Senjata Utama -->
-                <div class="glass-card p-8 rounded-3xl space-y-6">
+                <div class="glass-panel p-8 rounded-3xl space-y-6 glass-card-hover reveal" style="transition-delay: 0.2s;">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg">
+                        <div class="w-11 h-11 rounded-2xl bg-indigo-500/20 border border-indigo-400 text-indigo-400 flex items-center justify-center text-xl shadow-md">
                             <i class="fa-solid fa-bolt"></i>
                         </div>
-                        <h4 class="text-xl font-extrabold text-slate-800">Senjata Utama</h4>
+                        <h4 class="text-xl font-extrabold text-white">Senjata Utama</h4>
                     </div>
-                    <ul class="space-y-3 text-sm text-slate-700 font-semibold">
-                        <li class="flex items-center gap-3 bg-white/70 p-3 rounded-xl border border-sky-100">
-                            <i class="fa-solid fa-circle-check text-sky-600"></i> Prototyping Robotik & Sistem Otomasi Cepat
+                    <ul class="space-y-3.5 text-sm text-slate-300 font-semibold">
+                        <li class="flex items-center gap-3 bg-slate-900/80 p-3.5 rounded-2xl border border-sky-500/20">
+                            <i class="fa-solid fa-circle-check text-sky-400 text-lg"></i> Prototyping Robotik & Sistem Otomasi Cepat
                         </li>
-                        <li class="flex items-center gap-3 bg-white/70 p-3 rounded-xl border border-sky-100">
-                            <i class="fa-solid fa-circle-check text-sky-600"></i> Algoritma PID & Navigasi Line Follower Presisi
+                        <li class="flex items-center gap-3 bg-slate-900/80 p-3.5 rounded-2xl border border-sky-500/20">
+                            <i class="fa-solid fa-circle-check text-sky-400 text-lg"></i> Algoritma PID & Navigasi Line Follower Presisi
                         </li>
-                        <li class="flex items-center gap-3 bg-white/70 p-3 rounded-xl border border-sky-100">
-                            <i class="fa-solid fa-circle-check text-sky-600"></i> Strategi Refleks & Smash Badminton
+                        <li class="flex items-center gap-3 bg-slate-900/80 p-3.5 rounded-2xl border border-sky-500/20">
+                            <i class="fa-solid fa-circle-check text-sky-400 text-lg"></i> Strategi Refleks & Smash Badminton
                         </li>
                     </ul>
                 </div>
@@ -273,46 +326,46 @@
         </div>
     </section>
 
-    <!-- FORM KONTAK / KIRIM PESAN LANGSUNG KE WA FAH RIZAL -->
-    <section id="contact" class="py-16 px-4 mb-12">
-        <div class="max-w-4xl mx-auto glass-card rounded-3xl p-8 sm:p-12 border-2 border-white relative overflow-hidden">
-            <div class="text-center space-y-3 mb-8">
-                <div class="w-12 h-12 mx-auto rounded-2xl bg-sky-500 text-white flex items-center justify-center text-xl shadow-lg">
+    <!-- FORM KONTAK -->
+    <section id="contact" class="py-20 px-4 mb-16 relative z-10">
+        <div class="max-w-4xl mx-auto glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden reveal">
+            <div class="text-center space-y-3 mb-10">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-2xl shadow-lg">
                     <i class="fa-solid fa-comments"></i>
                 </div>
-                <h3 class="text-3xl font-extrabold text-slate-800">Sapa Fah Rizal</h3>
-                <p class="text-slate-600 text-sm sm:text-base max-w-xl mx-auto">
+                <h3 class="text-3xl font-extrabold text-white">Sapa Fah Rizal</h3>
+                <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto font-medium">
                     Kirim pesan langsung ke WhatsApp atau Email saya.
                 </p>
             </div>
 
-            <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
-                <div class="grid sm:grid-cols-2 gap-4">
+            <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
+                <div class="grid sm:grid-cols-2 gap-5">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nama Anda</label>
-                        <input type="text" id="sender-name" required placeholder="Masukkan nama Anda" class="w-full px-4 py-3 rounded-xl bg-white/80 border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                        <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Nama Anda</label>
+                        <input type="text" id="sender-name" required placeholder="Masukkan nama Anda" class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Topik Pesan</label>
-                        <select id="message-topic" class="w-full px-4 py-3 rounded-xl bg-white/80 border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
-                            <option value="Proyek Robotik">Proyek Robotik / Otomasi</option>
-                            <option value="Badminton">Badminton / Pertandingan</option>
-                            <option value="Diskusi BSI Scholar">Diskusi BSI Scholarship</option>
-                            <option value="Lainnya">Lainnya</option>
+                        <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Topik Pesan</label>
+                        <select id="message-topic" class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition">
+                            <option value="Proyek Robotik" class="bg-slate-900 text-white">Proyek Robotik / Otomasi</option>
+                            <option value="Badminton" class="bg-slate-900 text-white">Badminton / Pertandingan</option>
+                            <option value="Diskusi BSI Scholar" class="bg-slate-900 text-white">Diskusi BSI Scholarship</option>
+                            <option value="Lainnya" class="bg-slate-900 text-white">Lainnya</option>
                         </select>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Isi Pesan</label>
-                    <textarea id="sender-message" required rows="4" placeholder="Tuliskan pesan Anda di sini..." class="w-full px-4 py-3 rounded-xl bg-white/80 border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"></textarea>
+                    <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Isi Pesan</label>
+                    <textarea id="sender-message" required rows="4" placeholder="Tuliskan pesan Anda di sini..." class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition"></textarea>
                 </div>
                 
-                <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                    <button type="submit" name="channel" value="wa" class="flex-1 py-3.5 rounded-xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 transition flex items-center justify-center gap-2 shadow-md">
-                        <i class="fa-brands fa-whatsapp text-lg"></i> Kirim via WhatsApp
+                <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                    <button type="submit" name="channel" value="wa" class="flex-1 py-4 rounded-xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 hover:scale-105 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+                        <i class="fa-brands fa-whatsapp text-xl"></i> Kirim via WhatsApp
                     </button>
-                    <button type="submit" name="channel" value="email" class="flex-1 py-3.5 rounded-xl bg-sky-600 text-white font-bold text-sm hover:bg-sky-700 transition flex items-center justify-center gap-2 shadow-md">
-                        <i class="fa-solid fa-envelope text-lg"></i> Kirim via Email
+                    <button type="submit" name="channel" value="email" class="flex-1 py-4 rounded-xl bg-sky-600 text-white font-bold text-sm hover:bg-sky-700 hover:scale-105 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-sky-600/20">
+                        <i class="fa-solid fa-envelope text-xl"></i> Kirim via Email
                     </button>
                 </div>
             </form>
@@ -320,22 +373,96 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="py-8 text-center text-xs text-slate-500">
-        <p>© 2026 Fah Rizal. Didesain khusus dengan tema Biru Muda Modern.</p>
+    <footer class="py-10 text-center text-xs text-slate-400 font-semibold relative z-10 border-t border-sky-500/20">
+        <p>© 2026 Fah Rizal. Didesain khusus dengan Tema 3D Cyber & Futuristik.</p>
     </footer>
 
-    <!-- MODAL POPUP PRESTASI & SERTIFIKAT -->
-    <div id="achievement-modal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
-        <div class="modal-content glass-card max-w-3xl w-full rounded-3xl p-6 sm:p-8 relative bg-white/95 shadow-2xl border-2 border-white max-h-[90vh] overflow-y-auto">
-            <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
-                <i class="fa-solid fa-xmark"></i>
+    <!-- MODAL POPUP PRESTASI -->
+    <div id="achievement-modal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+        <div class="modal-content glass-panel max-w-3xl w-full rounded-3xl p-6 sm:p-8 relative border-2 border-sky-400/40 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div id="modal-body" class="space-y-4"></div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC & 3D ENGINE -->
     <script>
+        // 3D THREE.JS BACKGROUND ANIMATION
+        function init3DBackground() {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // CYBER POLYHEDRON MESH
+            const geometry = new THREE.IcosahedronGeometry(15, 2);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0x0284c7,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.35
+            });
+            const sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+
+            // PARTICLE FIELD
+            const particleCount = 700;
+            const particleGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 120;
+            }
+
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particleMaterial = new THREE.PointsMaterial({
+                color: 0x38bdf8,
+                size: 0.6,
+                transparent: true,
+                opacity: 0.8
+            });
+            const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particleSystem);
+
+            // MOUSE PARALLAX
+            let mouseX = 0, mouseY = 0;
+            document.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX - window.innerWidth / 2) * 0.0005;
+                mouseY = (e.clientY - window.innerHeight / 2) * 0.0005;
+            });
+
+            // ANIMATION LOOP
+            function animate() {
+                requestAnimationFrame(animate);
+                sphere.rotation.x += 0.002;
+                sphere.rotation.y += 0.003;
+
+                particleSystem.rotation.y += 0.001;
+
+                camera.position.x += (mouseX * 10 - camera.position.x) * 0.05;
+                camera.position.y += (-mouseY * 10 - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // RESIZE EVENT
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
         // DATA PRESTASI FAH RIZAL
         const achievementsData = [
             {
@@ -344,8 +471,8 @@
                 rank: "Juara 1",
                 level: "Tingkat Nasional",
                 year: "2026",
-                icon: "fa-trophy text-amber-500",
-                badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+                icon: "fa-trophy text-amber-400",
+                badgeColor: "bg-amber-500/20 text-amber-300 border-amber-400/40",
                 shortDesc: "Juara 1 Nasional kategori Inovasi Robotik dalam ajang IRIC 2026.",
                 fullDesc: "Pada ajang International/National Robotic Innovation Competition (IRIC) 2026, Fah Rizal berhasil meraih Juara 1 Tingkat Nasional dengan proyek otomasi cerdas.",
                 dokPhoto: "dok-iric.jpg",
@@ -357,8 +484,8 @@
                 rank: "Juara 1",
                 level: "Tingkat Nasional",
                 year: "2026",
-                icon: "fa-medal text-amber-500",
-                badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+                icon: "fa-medal text-amber-400",
+                badgeColor: "bg-amber-500/20 text-amber-300 border-amber-400/40",
                 shortDesc: "Juara 1 Tingkat Nasional dalam ajang FTK VAGANZA AIROC 2026.",
                 fullDesc: "Berkompetisi di FTK VAGANZA AIROC 2026 dengan inovasi robotika modern berakurasi tinggi.",
                 dokPhoto: "dok-airoc.jpg",
@@ -370,8 +497,8 @@
                 rank: "Juara 1",
                 level: "Tingkat Provinsi Banten",
                 year: "2026",
-                icon: "fa-award text-sky-600",
-                badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+                icon: "fa-award text-sky-400",
+                badgeColor: "bg-sky-500/20 text-sky-300 border-sky-400/40",
                 shortDesc: "Juara 1 Robot Line Follower se-Provinsi Banten di UIN Banten.",
                 fullDesc: "Mengembangkan robot Line Follower berkecepatan tinggi dan membawa pulang gelar Juara 1 Provinsi Banten.",
                 dokPhoto: "dok-uin.jpg",
@@ -383,8 +510,8 @@
                 rank: "Juara 3",
                 level: "Tingkat Nasional",
                 year: "2026",
-                icon: "fa-table-tennis-paddle-ball text-blue-600",
-                badgeColor: "bg-blue-100 text-blue-800 border-blue-200",
+                icon: "fa-table-tennis-paddle-ball text-blue-400",
+                badgeColor: "bg-blue-500/20 text-blue-300 border-blue-400/40",
                 shortDesc: "Podium 3 Tingkat Nasional pada kejuaraan badminton FLIGHT 236.",
                 fullDesc: "Menunjukkan performa terbaik di lapangan hingga meraih Juara 3 Nasional di kejuaraan FLIGHT 236.",
                 dokPhoto: "dok-badminton.jpg",
@@ -396,8 +523,8 @@
                 rank: "Juara 2",
                 level: "Tingkat Nasional",
                 year: "2025",
-                icon: "fa-trophy text-slate-500",
-                badgeColor: "bg-slate-100 text-slate-800 border-slate-200",
+                icon: "fa-trophy text-slate-300",
+                badgeColor: "bg-slate-500/20 text-slate-300 border-slate-400/40",
                 shortDesc: "Juara 2 Tingkat Nasional kompetisi mekatronika Mechatronics Day.",
                 fullDesc: "Mengintegrasikan sistem mekanik, elektronik, dan kontrol C++ hingga meraih Juara 2 Nasional.",
                 dokPhoto: "dok-mechatronics.jpg",
@@ -409,8 +536,8 @@
                 rank: "Juara Harapan 1",
                 level: "Tingkat Kota Cilegon",
                 year: "2025",
-                icon: "fa-certificate text-sky-600",
-                badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+                icon: "fa-certificate text-sky-400",
+                badgeColor: "bg-sky-500/20 text-sky-300 border-sky-400/40",
                 shortDesc: "Juara Harapan 1 Line Follower FRC 2025 di Kota Cilegon.",
                 fullDesc: "Menguji algoritma PID line follower dan memperoleh gelar Juara Harapan 1 Kota Cilegon.",
                 dokPhoto: "dok-frc.jpg",
@@ -418,25 +545,26 @@
             }
         ];
 
+        // RENDER PRESTASI
         function renderAchievements() {
             const container = document.getElementById('achievement-grid');
-            container.innerHTML = achievementsData.map(item => `
-                <div onclick="openModal(${item.id})" class="glass-card p-6 rounded-2xl glass-card-hover cursor-pointer flex flex-col justify-between border border-white">
+            container.innerHTML = achievementsData.map((item, index) => `
+                <div onclick="openModal(${item.id})" class="glass-panel p-6 rounded-3xl glass-card-hover cursor-pointer flex flex-col justify-between reveal" style="transition-delay: ${index * 0.1}s">
                     <div>
                         <div class="flex items-center justify-between gap-2 mb-4">
                             <span class="px-3 py-1 rounded-full text-xs font-bold border ${item.badgeColor}">
                                 ${item.rank}
                             </span>
-                            <span class="text-xs font-semibold text-slate-500">${item.year}</span>
+                            <span class="text-xs font-bold text-slate-400">${item.year}</span>
                         </div>
-                        <div class="w-10 h-10 rounded-xl bg-sky-100 flex items-center justify-center text-lg mb-3">
+                        <div class="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-400/30 flex items-center justify-center text-xl mb-4 shadow-inner">
                             <i class="fa-solid ${item.icon}"></i>
                         </div>
-                        <h4 class="font-extrabold text-slate-800 text-lg mb-1 leading-snug">${item.title}</h4>
-                        <p class="text-xs font-bold text-sky-600 mb-3">${item.level}</p>
-                        <p class="text-slate-600 text-sm leading-relaxed mb-4">${item.shortDesc}</p>
+                        <h4 class="font-extrabold text-white text-lg mb-1 leading-snug">${item.title}</h4>
+                        <p class="text-xs font-bold text-sky-400 mb-3">${item.level}</p>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4 font-medium">${item.shortDesc}</p>
                     </div>
-                    <div class="pt-3 border-t border-sky-100/60 flex items-center justify-between text-xs font-bold text-sky-700">
+                    <div class="pt-3 border-t border-sky-500/20 flex items-center justify-between text-xs font-extrabold text-sky-400">
                         <span>Buka Dokumentasi & Sertifikat</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </div>
@@ -444,6 +572,7 @@
             `).join('');
         }
 
+        // MODAL
         function openModal(id) {
             const data = achievementsData.find(item => item.id === id);
             if (!data) return;
@@ -458,30 +587,29 @@
                         <span class="text-xs font-bold text-slate-400">• ${data.year}</span>
                     </div>
 
-                    <h3 class="text-2xl font-extrabold text-slate-800">${data.title}</h3>
+                    <h3 class="text-2xl font-extrabold text-white">${data.title}</h3>
 
-                    <!-- GRID FOTO DOKUMENTASI & SERTIFIKAT UTUH (OBJECT-CONTAIN) -->
                     <div class="grid sm:grid-cols-2 gap-4">
-                        <div class="rounded-2xl overflow-hidden shadow border border-sky-100 bg-slate-900/10 p-2 flex flex-col items-center">
+                        <div class="rounded-2xl overflow-hidden shadow border border-sky-500/30 bg-slate-900 p-2 flex flex-col items-center">
                             <div class="w-full h-52 sm:h-60 flex items-center justify-center">
                                 <img src="${data.dokPhoto}" onerror="this.src='https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80'" class="max-w-full max-h-full object-contain rounded-lg">
                             </div>
-                            <p class="text-center text-xs font-bold text-slate-700 mt-2 bg-white/80 w-full py-1 rounded-md">Foto Dokumentasi</p>
+                            <p class="text-center text-xs font-bold text-sky-300 mt-2 bg-slate-800 w-full py-1 rounded-md">Foto Dokumentasi</p>
                         </div>
-                        <div class="rounded-2xl overflow-hidden shadow border border-sky-100 bg-slate-900/10 p-2 flex flex-col items-center">
+                        <div class="rounded-2xl overflow-hidden shadow border border-sky-500/30 bg-slate-900 p-2 flex flex-col items-center">
                             <div class="w-full h-52 sm:h-60 flex items-center justify-center">
                                 <img src="${data.certPhoto}" onerror="this.src='https://images.unsplash.com/photo-1563968743333-044cef800494?auto=format&fit=crop&w=800&q=80'" class="max-w-full max-h-full object-contain rounded-lg">
                             </div>
-                            <p class="text-center text-xs font-bold text-slate-700 mt-2 bg-white/80 w-full py-1 rounded-md">Foto Sertifikat</p>
+                            <p class="text-center text-xs font-bold text-sky-300 mt-2 bg-slate-800 w-full py-1 rounded-md">Foto Sertifikat</p>
                         </div>
                     </div>
 
-                    <div class="bg-sky-50 p-4 rounded-xl border border-sky-100">
-                        <p class="text-slate-700 text-sm leading-relaxed">${data.fullDesc}</p>
+                    <div class="bg-slate-900/90 p-4 rounded-xl border border-sky-500/20">
+                        <p class="text-slate-300 text-sm leading-relaxed font-medium">${data.fullDesc}</p>
                     </div>
 
                     <div class="pt-2 text-right">
-                        <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-sky-600 text-white font-bold text-sm hover:bg-sky-700 transition">
+                        <button onclick="closeModal()" class="px-6 py-2.5 rounded-xl bg-sky-600 text-white font-bold text-sm hover:bg-sky-500 transition">
                             Tutup
                         </button>
                     </div>
@@ -495,6 +623,30 @@
             document.getElementById('achievement-modal').classList.remove('active');
         }
 
+        // AUTOPLAY MUSIC LOGIC
+        function initAutoPlayMusic() {
+            const music = document.getElementById('bg-music');
+            if (!music) return;
+            
+            music.volume = 0.5;
+            
+            const playPromise = music.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    const startAudioOnInteraction = () => {
+                        music.play();
+                        document.removeEventListener('click', startAudioOnInteraction);
+                        document.removeEventListener('touchstart', startAudioOnInteraction);
+                        document.removeEventListener('keydown', startAudioOnInteraction);
+                    };
+                    document.addEventListener('click', startAudioOnInteraction);
+                    document.addEventListener('touchstart', startAudioOnInteraction);
+                    document.addEventListener('keydown', startAudioOnInteraction);
+                });
+            }
+        }
+
+        // FORM SUBMIT
         function handleFormSubmit(e) {
             e.preventDefault();
             const name = document.getElementById('sender-name').value;
@@ -517,8 +669,26 @@
             }
         }
 
+        // SCROLL REVEAL OBSERVER
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            init3DBackground();
             renderAchievements();
+            initAutoPlayMusic();
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll();
         });
     </script>
 </body>
