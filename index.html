@@ -90,16 +90,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* SPLASH SCREEN OVERLAY */
-        #splash-screen {
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-        #splash-screen.hidden-splash {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
         /* MODAL ANIMATION */
         .modal {
             transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -122,31 +112,10 @@
         <source src="lagu-natal.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- SPLASH SCREEN / KETUK UNTUK MASUK & PLAY MUSIK -->
-    <div id="splash-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95 backdrop-blur-2xl p-4">
-        <div class="glass-panel max-w-lg w-full rounded-3xl p-8 sm:p-10 text-center space-y-6 border-2 border-sky-400/50 shadow-2xl relative overflow-hidden">
-            <div class="absolute -top-24 -right-24 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl"></div>
-            
-            <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-tr from-amber-500 to-sky-500 border border-amber-300 flex items-center justify-center text-amber-100 text-3xl shadow-xl animate-bounce">
-                <i class="fa-solid fa-trophy"></i>
-            </div>
-            
-            <div class="space-y-2">
-                <h2 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-wider">Portofolio Fah Rizal</h2>
-                <p class="text-slate-300 text-sm font-medium">Sistem 3D Cyber Interaktif & Otomasi Robotik</p>
-            </div>
-
-            <div class="bg-slate-900/80 p-4 rounded-2xl border border-sky-500/30 text-xs text-sky-300 font-semibold flex items-center justify-center gap-2">
-                <i class="fa-solid fa-shield-halved text-amber-400"></i>
-                <span>Status: Aman • Pengunjung Terdeteksi Otomatis</span>
-            </div>
-
-            <button onclick="startPortfolio()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-extrabold text-base shadow-xl shadow-sky-500/40 hover:scale-105 transition duration-300 flex items-center justify-center gap-3">
-                <i class="fa-solid fa-play text-amber-300"></i> Ketuk untuk Masuk & Nyalakan Musik
-            </button>
-        </div>
-    </div>
+    <!-- TOMBOL MUSIK MELAYANG DI POJOK KANAN BAWAH -->
+    <button onclick="toggleMusic()" id="music-btn" class="fixed bottom-12 right-5 z-50 w-12 h-12 rounded-full glass-panel border border-sky-400 text-amber-400 flex items-center justify-center text-lg shadow-xl hover:scale-110 transition duration-300">
+        <i class="fa-solid fa-music" id="music-icon"></i>
+    </button>
 
     <!-- NAVBAR RESPONSIF -->
     <nav class="fixed top-0 left-0 right-0 z-40 px-4 py-4">
@@ -164,9 +133,14 @@
                 <a href="#tools" class="hover:text-sky-400 transition">Tools</a>
                 <a href="#contact" class="hover:text-sky-400 transition">Kontak</a>
             </div>
-            <a href="#contact" class="px-5 py-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold text-xs sm:text-sm shadow-lg shadow-sky-500/30 hover:scale-105 transition duration-300">
-                Sapa Saya 👋
-            </a>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleMusic()" class="px-3.5 py-2 rounded-full bg-slate-800 border border-sky-500/30 text-amber-400 font-bold text-xs flex items-center gap-1.5 hover:bg-slate-700 transition">
+                    <i class="fa-solid fa-music"></i> <span id="music-status-text">Musik</span>
+                </button>
+                <a href="#contact" class="px-5 py-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold text-xs sm:text-sm shadow-lg shadow-sky-500/30 hover:scale-105 transition duration-300">
+                    Sapa Saya 👋
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -347,27 +321,9 @@
             </div>
         </section>
 
-        <!-- KONTAK & DETEKSI PENGUNJUNG -->
+        <!-- KONTAK -->
         <section id="contact" class="px-4">
-            <div class="max-w-4xl mx-auto space-y-6 w-full">
-                
-                <!-- WIDGET DETEKSI PENGUNJUNG -->
-                <div class="glass-panel p-6 rounded-3xl border border-sky-400/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
-                    <div class="flex items-center gap-4 text-center sm:text-left">
-                        <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-xl shrink-0">
-                            <i class="fa-solid fa-fingerprint"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-white font-extrabold text-sm sm:text-base">Deteksi Perangkat Pengunjung</h4>
-                            <p id="visitor-info" class="text-xs text-slate-300 font-medium">Menganalisis sistem & jaringan Anda...</p>
-                        </div>
-                    </div>
-                    <div class="px-4 py-2 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 text-xs font-extrabold tracking-widest uppercase">
-                        Status: Online 🟢
-                    </div>
-                </div>
-
-                <!-- FORM KONTAK -->
+            <div class="max-w-4xl mx-auto w-full">
                 <div class="glass-panel rounded-3xl p-6 sm:p-12 relative overflow-hidden">
                     <div class="text-center space-y-3 mb-10">
                         <div class="w-14 h-14 mx-auto rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-2xl shadow-lg">
@@ -410,7 +366,6 @@
                         </div>
                     </form>
                 </div>
-
             </div>
         </section>
 
@@ -442,41 +397,53 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // MASUK & UTAMA PEMUTARAN MUSIK
-        function startPortfolio() {
-            const splash = document.getElementById('splash-screen');
+        let isPlaying = false;
+
+        // FUNGSI PLAY / PAUSE MUSIK
+        function toggleMusic() {
             const music = document.getElementById('bg-music');
-            
-            splash.classList.add('hidden-splash');
-            
-            if (music) {
+            const icon = document.getElementById('music-icon');
+            const statusText = document.getElementById('music-status-text');
+
+            if (!music) return;
+
+            if (isPlaying) {
+                music.pause();
+                isPlaying = false;
+                if(icon) icon.className = "fa-solid fa-music";
+                if(statusText) statusText.innerText = "Musik";
+            } else {
                 music.volume = 0.5;
-                music.play().catch(err => console.log("Audio play error:", err));
+                music.play().then(() => {
+                    isPlaying = true;
+                    if(icon) icon.className = "fa-solid fa-volume-high animate-bounce";
+                    if(statusText) statusText.innerText = "Mati";
+                }).catch(e => console.log("Audio Error:", e));
             }
         }
 
-        // DETEKSI PENGUNJUNG OTOMATIS
-        function initVisitorDetection() {
-            const visitorEl = document.getElementById('visitor-info');
-            if (!visitorEl) return;
+        // OTOMATIS MENYALAKAN MUSIK SAAT LAYAR DIKLIK PERTAMA KALI
+        function initAutoPlayMusic() {
+            const music = document.getElementById('bg-music');
+            if (!music) return;
             
-            const ua = navigator.userAgent;
-            let os = "Sistem Tidak Dikenal";
-            let browser = "Browser Tidak Dikenal";
+            const startOnInteraction = () => {
+                if (!isPlaying) {
+                    music.volume = 0.5;
+                    music.play().then(() => {
+                        isPlaying = true;
+                        const icon = document.getElementById('music-icon');
+                        const statusText = document.getElementById('music-status-text');
+                        if(icon) icon.className = "fa-solid fa-volume-high animate-bounce";
+                        if(statusText) statusText.innerText = "Mati";
+                    }).catch(e => console.log("Blocked:", e));
+                }
+                document.removeEventListener('click', startOnInteraction);
+                document.removeEventListener('touchstart', startOnInteraction);
+            };
 
-            if (ua.indexOf("Win") !== -1) os = "Windows PC";
-            if (ua.indexOf("Mac") !== -1) os = "Mac / iOS";
-            if (ua.indexOf("Android") !== -1) os = "Android Mobile";
-            if (ua.indexOf("like Mac") !== -1) os = "iPhone / iPad";
-            if (ua.indexOf("Linux") !== -1) os = "Linux System";
-
-            if (ua.indexOf("Chrome") !== -1) browser = "Google Chrome";
-            else if (ua.indexOf("Safari") !== -1) browser = "Apple Safari";
-            else if (ua.indexOf("Firefox") !== -1) browser = "Mozilla Firefox";
-            else if (ua.indexOf("Edge") !== -1) browser = "Microsoft Edge";
-
-            const screenRes = `${window.screen.width}x${window.screen.height}`;
-            visitorEl.innerHTML = `Perangkat: <strong class="text-sky-400">${os}</strong> | Browser: <strong class="text-sky-400">${browser}</strong> | Resolusi: <strong class="text-sky-400">${screenRes}</strong>`;
+            document.addEventListener('click', startOnInteraction);
+            document.addEventListener('touchstart', startOnInteraction);
         }
 
         // 3D THREE.JS BACKGROUND
@@ -748,7 +715,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             init3DBackground();
             renderAchievements();
-            initVisitorDetection();
+            initAutoPlayMusic();
         });
     </script>
 </body>
