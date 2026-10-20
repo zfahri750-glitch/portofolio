@@ -45,7 +45,7 @@
 
         /* GLASSMORPHISM MODERN */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.7);
+            background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(56, 189, 248, 0.3);
@@ -107,6 +107,16 @@
             pointer-events: auto;
         }
 
+        /* SPLASH SCREEN OVERLAY */
+        #splash-screen {
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        #splash-screen.hidden-splash {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
         /* MODAL ANIMATION */
         .modal {
             transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -121,16 +131,42 @@
 </head>
 <body class="min-h-screen relative">
 
-    <!-- 3D WEBGL BACKGROUND CANVAS (LEBIH RAME & DINAMIS) -->
+    <!-- 3D WEBGL BACKGROUND CANVAS (SANGAT RAME) -->
     <div id="canvas-container"></div>
 
-    <!-- AUDIO PLAYER (MEMUTAR LAGU 'lagu-natal.mp3') -->
-    <audio id="bg-music" loop autoplay>
+    <!-- AUDIO PLAYER -->
+    <audio id="bg-music" loop>
         <source src="lagu-natal.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- NAVBAR DENGAN LOGO MAHOTA / TROPI (TANPA LOGO ROBOT) -->
-    <nav class="fixed top-0 left-0 right-0 z-50 px-4 py-5">
+    <!-- SPLASH SCREEN / AWAL MASUK (MENGHILANG SETELAH DIKLIK) -->
+    <div id="splash-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95 backdrop-blur-2xl p-4">
+        <div class="glass-panel max-w-lg w-full rounded-3xl p-8 sm:p-10 text-center space-y-6 border-2 border-sky-400/50 shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl"></div>
+            
+            <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-tr from-amber-500 to-sky-500 border border-amber-300 flex items-center justify-center text-amber-100 text-3xl shadow-xl animate-bounce">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            
+            <div class="space-y-2">
+                <h2 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-wider">Portofolio Fah Rizal</h2>
+                <p class="text-slate-300 text-sm font-medium">Sistem 3D Cyber Interaktif & Otomasi Robotik</p>
+            </div>
+
+            <div class="bg-slate-900/80 p-4 rounded-2xl border border-sky-500/30 text-xs text-sky-300 font-semibold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-shield-halved text-amber-400"></i>
+                <span>Status: Aman • Pengunjung Terdeteksi Otomatis</span>
+            </div>
+
+            <button onclick="startPortfolio()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-extrabold text-base shadow-xl shadow-sky-500/40 hover:scale-105 transition duration-300 flex items-center justify-center gap-3">
+                <i class="fa-solid fa-play text-amber-300"></i> Ketuk untuk Masuk & Nyalakan Musik
+            </button>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 left-0 right-0 z-40 px-4 py-5">
         <div class="max-w-6xl mx-auto glass-panel rounded-full px-8 py-3.5 flex justify-between items-center">
             <a href="#" class="text-xl font-extrabold tracking-wider flex items-center gap-3 text-sky-400">
                 <span class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-sky-500 border border-amber-300 flex items-center justify-center text-amber-100 shadow-md">
@@ -152,15 +188,15 @@
     </nav>
 
     <!-- NAVIGATOR SLIDER KIRI & KANAN -->
-    <button onclick="prevSlide()" class="fixed left-4 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full glass-panel text-sky-400 hover:bg-sky-500 hover:text-white flex items-center justify-center transition duration-300 shadow-2xl">
+    <button onclick="prevSlide()" class="fixed left-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full glass-panel text-sky-400 hover:bg-sky-500 hover:text-white flex items-center justify-center transition duration-300 shadow-2xl">
         <i class="fa-solid fa-chevron-left text-xl"></i>
     </button>
-    <button onclick="nextSlide()" class="fixed right-4 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full glass-panel text-sky-400 hover:bg-sky-500 hover:text-white flex items-center justify-center transition duration-300 shadow-2xl">
+    <button onclick="nextSlide()" class="fixed right-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full glass-panel text-sky-400 hover:bg-sky-500 hover:text-white flex items-center justify-center transition duration-300 shadow-2xl">
         <i class="fa-solid fa-chevron-right text-xl"></i>
     </button>
 
     <!-- SLIDER WRAPPER UTAMA -->
-    <main class="pt-36 pb-20 relative z-10">
+    <main class="pt-36 pb-24 relative z-20">
         <div class="slide-container" id="slide-wrapper">
 
             <!-- SLIDE 1: HERO SECTION -->
@@ -258,7 +294,6 @@
                 <div class="max-w-6xl mx-auto w-full">
                     <div class="text-center space-y-3 mb-10">
                         <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-400 bg-sky-500/10 px-4 py-1.5 rounded-full inline-block border border-sky-400/30">Rekam Jejak & Kejuaraan</h2>
-                        <!-- TEKS DIUBAH Sesuai Permintaan -->
                         <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Prestasi Fah Rizal</h3>
                         <p class="text-slate-400 text-sm sm:text-base max-w-lg mx-auto">Klik pada kartu untuk melihat detail dokumentasi foto & sertifikat resmi.</p>
                     </div>
@@ -269,7 +304,7 @@
                 </div>
             </section>
 
-            <!-- SLIDE 4: TOOLS & SENJATA (JAUH LEBIH BANYAK) -->
+            <!-- SLIDE 4: TOOLS & SENJATA (BANYAK) -->
             <section class="slide-item px-4 flex items-center justify-center">
                 <div class="max-w-6xl mx-auto w-full space-y-10">
                     <div class="text-center space-y-3">
@@ -277,7 +312,6 @@
                         <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Tools & Senjata Utama</h3>
                     </div>
 
-                    <!-- EKSPANSI TOOLS (BANYAK ICON) -->
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
                         <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
                             <i class="fa-solid fa-code text-sky-400 text-3xl mb-3 block"></i>
@@ -339,57 +373,78 @@
                 </div>
             </section>
 
-            <!-- SLIDE 5: KONTAK -->
+            <!-- SLIDE 5: KONTAK & FITUR DETEKSI PENGUNJUNG -->
             <section class="slide-item px-4 flex items-center justify-center">
-                <div class="max-w-4xl mx-auto glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden w-full">
-                    <div class="text-center space-y-3 mb-10">
-                        <div class="w-14 h-14 mx-auto rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-2xl shadow-lg">
-                            <i class="fa-solid fa-comments"></i>
+                <div class="max-w-4xl mx-auto space-y-6 w-full">
+                    
+                    <!-- WIDGET DETEKSI PENGUNJUNG -->
+                    <div class="glass-panel p-6 rounded-3xl border border-sky-400/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                        <div class="flex items-center gap-4 text-center sm:text-left">
+                            <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-fingerprint"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-extrabold text-sm sm:text-base">Deteksi Perangkat Pengunjung</h4>
+                                <p id="visitor-info" class="text-xs text-slate-300 font-medium">Menganalisis sistem & jaringan Anda...</p>
+                            </div>
                         </div>
-                        <h3 class="text-3xl font-extrabold text-white">Sapa Fah Rizal</h3>
-                        <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto font-medium">
-                            Kirim pesan langsung ke WhatsApp atau Email saya.
-                        </p>
+                        <div class="px-4 py-2 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 text-xs font-extrabold tracking-widest uppercase">
+                            Status: Online 🟢
+                        </div>
                     </div>
 
-                    <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
-                        <div class="grid sm:grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Nama Anda</label>
-                                <input type="text" id="sender-name" required placeholder="Masukkan nama Anda" class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition">
+                    <!-- FORM KONTAK -->
+                    <div class="glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+                        <div class="text-center space-y-3 mb-10">
+                            <div class="w-14 h-14 mx-auto rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-2xl shadow-lg">
+                                <i class="fa-solid fa-comments"></i>
+                            </div>
+                            <h3 class="text-3xl font-extrabold text-white">Sapa Fah Rizal</h3>
+                            <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto font-medium">
+                                Kirim pesan langsung ke WhatsApp atau Email saya.
+                            </p>
+                        </div>
+
+                        <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
+                            <div class="grid sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Nama Anda</label>
+                                    <input type="text" id="sender-name" required placeholder="Masukkan nama Anda" class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Topik Pesan</label>
+                                    <select id="message-topic" class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition">
+                                        <option value="Proyek Robotik" class="bg-slate-900 text-white">Proyek Robotik / Otomasi</option>
+                                        <option value="Badminton" class="bg-slate-900 text-white">Badminton / Pertandingan</option>
+                                        <option value="Diskusi BSI Scholar" class="bg-slate-900 text-white">Diskusi BSI Scholarship</option>
+                                        <option value="Lainnya" class="bg-slate-900 text-white">Lainnya</option>
+                                    </select>
+                                </div>
                             </div>
                             <div>
-                                <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Topik Pesan</label>
-                                <select id="message-topic" class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition">
-                                    <option value="Proyek Robotik" class="bg-slate-900 text-white">Proyek Robotik / Otomasi</option>
-                                    <option value="Badminton" class="bg-slate-900 text-white">Badminton / Pertandingan</option>
-                                    <option value="Diskusi BSI Scholar" class="bg-slate-900 text-white">Diskusi BSI Scholarship</option>
-                                    <option value="Lainnya" class="bg-slate-900 text-white">Lainnya</option>
-                                </select>
+                                <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Isi Pesan</label>
+                                <textarea id="sender-message" required rows="4" placeholder="Tuliskan pesan Anda di sini..." class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition"></textarea>
                             </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Isi Pesan</label>
-                            <textarea id="sender-message" required rows="4" placeholder="Tuliskan pesan Anda di sini..." class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition"></textarea>
-                        </div>
-                        
-                        <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                            <button type="submit" name="channel" value="wa" class="flex-1 py-4 rounded-xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 hover:scale-105 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
-                                <i class="fa-brands fa-whatsapp text-xl"></i> Kirim via WhatsApp
-                            </button>
-                            <button type="submit" name="channel" value="email" class="flex-1 py-4 rounded-xl bg-sky-600 text-white font-bold text-sm hover:bg-sky-700 hover:scale-105 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-sky-600/20">
-                                <i class="fa-solid fa-envelope text-xl"></i> Kirim via Email
-                            </button>
-                        </div>
-                    </form>
+                            
+                            <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                                <button type="submit" name="channel" value="wa" class="flex-1 py-4 rounded-xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 hover:scale-105 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+                                    <i class="fa-brands fa-whatsapp text-xl"></i> Kirim via WhatsApp
+                                </button>
+                                <button type="submit" name="channel" value="email" class="flex-1 py-4 rounded-xl bg-sky-600 text-white font-bold text-sm hover:bg-sky-700 hover:scale-105 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-sky-600/20">
+                                    <i class="fa-solid fa-envelope text-xl"></i> Kirim via Email
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
             </section>
 
         </div>
     </main>
 
-    <!-- SLIDE INDICATORS (TITIK NAVIGASI Bawah) -->
-    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 bg-slate-950/80 px-6 py-2.5 rounded-full border border-sky-500/30 backdrop-blur-md">
+    <!-- SLIDE INDICATORS -->
+    <div class="fixed bottom-12 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 bg-slate-950/80 px-6 py-2.5 rounded-full border border-sky-500/30 backdrop-blur-md">
         <button onclick="goToSlide(0)" class="slide-dot w-3 h-3 rounded-full bg-sky-400 transition-all"></button>
         <button onclick="goToSlide(1)" class="slide-dot w-3 h-3 rounded-full bg-slate-600 transition-all"></button>
         <button onclick="goToSlide(2)" class="slide-dot w-3 h-3 rounded-full bg-slate-600 transition-all"></button>
@@ -398,7 +453,7 @@
     </div>
 
     <!-- TECH MARQUEE BANNER FOOTER -->
-    <div class="fixed bottom-0 left-0 right-0 z-30 py-2 border-t border-sky-500/20 bg-slate-950/80 backdrop-blur-md">
+    <div class="fixed bottom-0 left-0 right-0 z-20 py-2 border-t border-sky-500/20 bg-slate-950/80 backdrop-blur-md">
         <div class="marquee-container">
             <div class="marquee-content font-extrabold text-xs tracking-widest text-sky-300 uppercase space-x-12">
                 <span><i class="fa-solid fa-code text-sky-400"></i> C++ Programming</span>
@@ -421,10 +476,23 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC & 3D ENGINE (DITINGKATKAN SANGAT RAME) -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         let currentSlide = 0;
         const totalSlides = 5;
+
+        // START PORTFOLIO & PLAY MUSIC
+        function startPortfolio() {
+            const splash = document.getElementById('splash-screen');
+            const music = document.getElementById('bg-music');
+            
+            splash.classList.add('hidden-splash');
+            
+            if (music) {
+                music.volume = 0.5;
+                music.play().catch(err => console.log("Audio play error:", err));
+            }
+        }
 
         // SLIDER CONTROL
         function updateSlidePosition() {
@@ -466,7 +534,7 @@
             updateSlidePosition();
         }
 
-        // SWIPE / TOUCH CAROUSEL FOR MOBILE
+        // SWIPE CAROUSEL FOR MOBILE
         let touchStartX = 0;
         let touchEndX = 0;
         document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
@@ -476,7 +544,29 @@
             if (touchEndX - touchStartX > 50) prevSlide();
         });
 
-        // 3D THREE.JS BACKGROUND (RAME & CYBER)
+        // DETEKSI PENGUNJUNG OTOMATIS
+        function initVisitorDetection() {
+            const visitorEl = document.getElementById('visitor-info');
+            const ua = navigator.userAgent;
+            let os = "Sistem Tidak Dikenal";
+            let browser = "Browser Tidak Dikenal";
+
+            if (ua.indexOf("Win") !== -1) os = "Windows PC";
+            if (ua.indexOf("Mac") !== -1) os = "Mac / iOS";
+            if (ua.indexOf("Android") !== -1) os = "Android Mobile";
+            if (ua.indexOf("like Mac") !== -1) os = "iPhone / iPad";
+            if (ua.indexOf("Linux") !== -1) os = "Linux System";
+
+            if (ua.indexOf("Chrome") !== -1) browser = "Google Chrome";
+            else if (ua.indexOf("Safari") !== -1) browser = "Apple Safari";
+            else if (ua.indexOf("Firefox") !== -1) browser = "Mozilla Firefox";
+            else if (ua.indexOf("Edge") !== -1) browser = "Microsoft Edge";
+
+            const screenRes = `${window.screen.width}x${window.screen.height}`;
+            visitorEl.innerHTML = `Perangkat: <strong class="text-sky-400">${os}</strong> | Browser: <strong class="text-sky-400">${browser}</strong> | Resolusi: <strong class="text-sky-400">${screenRes}</strong>`;
+        }
+
+        // 3D THREE.JS BACKGROUND (SANGAT RAME)
         function init3DBackground() {
             const container = document.getElementById('canvas-container');
             const scene = new THREE.Scene();
@@ -489,7 +579,6 @@
             renderer.setPixelRatio(window.devicePixelRatio);
             container.appendChild(renderer.domElement);
 
-            // 1. MAIN CYBER ICOSAHEDRON
             const geometry = new THREE.IcosahedronGeometry(14, 2);
             const material = new THREE.MeshBasicMaterial({
                 color: 0x0284c7,
@@ -500,7 +589,6 @@
             const sphere = new THREE.Mesh(geometry, material);
             scene.add(sphere);
 
-            // 2. EXTRA 3D TORUS KNOT RING (BIAR RAME 3D NYA)
             const torusGeo = new THREE.TorusKnotGeometry(18, 0.8, 120, 16);
             const torusMat = new THREE.MeshBasicMaterial({
                 color: 0x818cf8,
@@ -511,7 +599,6 @@
             const torusKnot = new THREE.Mesh(torusGeo, torusMat);
             scene.add(torusKnot);
 
-            // 3. 1500+ PARTIKEL BINTANG SIBER
             const particleCount = 1500;
             const particleGeometry = new THREE.BufferGeometry();
             const positions = new Float32Array(particleCount * 3);
@@ -530,14 +617,12 @@
             const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
             scene.add(particleSystem);
 
-            // MOUSE PARALLAX
             let mouseX = 0, mouseY = 0;
             document.addEventListener('mousemove', (e) => {
                 mouseX = (e.clientX - window.innerWidth / 2) * 0.0006;
                 mouseY = (e.clientY - window.innerHeight / 2) * 0.0006;
             });
 
-            // ANIMATION LOOP
             function animate() {
                 requestAnimationFrame(animate);
                 sphere.rotation.x += 0.003;
@@ -721,29 +806,6 @@
             document.getElementById('achievement-modal').classList.remove('active');
         }
 
-        // AUTOPLAY MUSIC LOGIC
-        function initAutoPlayMusic() {
-            const music = document.getElementById('bg-music');
-            if (!music) return;
-            
-            music.volume = 0.5;
-            
-            const playPromise = music.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    const startAudioOnInteraction = () => {
-                        music.play();
-                        document.removeEventListener('click', startAudioOnInteraction);
-                        document.removeEventListener('touchstart', startAudioOnInteraction);
-                        document.removeEventListener('keydown', startAudioOnInteraction);
-                    };
-                    document.addEventListener('click', startAudioOnInteraction);
-                    document.addEventListener('touchstart', startAudioOnInteraction);
-                    document.addEventListener('keydown', startAudioOnInteraction);
-                });
-            }
-        }
-
         // FORM SUBMIT
         function handleFormSubmit(e) {
             e.preventDefault();
@@ -770,7 +832,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             init3DBackground();
             renderAchievements();
-            initAutoPlayMusic();
+            initVisitorDetection();
             updateSlidePosition();
         });
     </script>
