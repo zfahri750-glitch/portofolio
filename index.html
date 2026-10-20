@@ -90,33 +90,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* SLIDE CAROUSEL SYSTEM */
-        .slide-container {
-            display: flex;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-            width: 100%;
-        }
-        .slide-item {
-            min-width: 100%;
-            opacity: 0.3;
-            transition: opacity 0.6s ease;
-            pointer-events: none;
-        }
-        .slide-item.active-slide {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* SPLASH SCREEN OVERLAY */
-        #splash-screen {
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-        #splash-screen.hidden-splash {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
         /* MODAL ANIMATION */
         .modal {
             transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -131,7 +104,7 @@
 </head>
 <body class="min-h-screen relative">
 
-    <!-- 3D WEBGL BACKGROUND CANVAS (SANGAT RAME) -->
+    <!-- 3D WEBGL BACKGROUND CANVAS -->
     <div id="canvas-container"></div>
 
     <!-- AUDIO PLAYER -->
@@ -139,321 +112,276 @@
         <source src="lagu-natal.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- SPLASH SCREEN / AWAL MASUK (MENGHILANG SETELAH DIKLIK) -->
-    <div id="splash-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95 backdrop-blur-2xl p-4">
-        <div class="glass-panel max-w-lg w-full rounded-3xl p-8 sm:p-10 text-center space-y-6 border-2 border-sky-400/50 shadow-2xl relative overflow-hidden">
-            <div class="absolute -top-24 -right-24 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl"></div>
-            
-            <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-tr from-amber-500 to-sky-500 border border-amber-300 flex items-center justify-center text-amber-100 text-3xl shadow-xl animate-bounce">
-                <i class="fa-solid fa-trophy"></i>
-            </div>
-            
-            <div class="space-y-2">
-                <h2 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-wider">Portofolio Fah Rizal</h2>
-                <p class="text-slate-300 text-sm font-medium">Sistem 3D Cyber Interaktif & Otomasi Robotik</p>
-            </div>
-
-            <div class="bg-slate-900/80 p-4 rounded-2xl border border-sky-500/30 text-xs text-sky-300 font-semibold flex items-center justify-center gap-2">
-                <i class="fa-solid fa-shield-halved text-amber-400"></i>
-                <span>Status: Aman • Pengunjung Terdeteksi Otomatis</span>
-            </div>
-
-            <button onclick="startPortfolio()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-extrabold text-base shadow-xl shadow-sky-500/40 hover:scale-105 transition duration-300 flex items-center justify-center gap-3">
-                <i class="fa-solid fa-play text-amber-300"></i> Ketuk untuk Masuk & Nyalakan Musik
-            </button>
-        </div>
-    </div>
-
-    <!-- NAVBAR -->
-    <nav class="fixed top-0 left-0 right-0 z-40 px-4 py-5">
-        <div class="max-w-6xl mx-auto glass-panel rounded-full px-8 py-3.5 flex justify-between items-center">
-            <a href="#" class="text-xl font-extrabold tracking-wider flex items-center gap-3 text-sky-400">
-                <span class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-sky-500 border border-amber-300 flex items-center justify-center text-amber-100 shadow-md">
+    <!-- NAVBAR RESPONSIF -->
+    <nav class="fixed top-0 left-0 right-0 z-40 px-4 py-4">
+        <div class="max-w-6xl mx-auto glass-panel rounded-full px-6 sm:px-8 py-3 flex justify-between items-center">
+            <a href="#" class="text-base sm:text-xl font-extrabold tracking-wider flex items-center gap-2.5 text-sky-400">
+                <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-sky-500 border border-amber-300 flex items-center justify-center text-amber-100 shadow-md text-sm">
                     <i class="fa-solid fa-trophy"></i>
                 </span>
                 <span class="tracking-widest">FAH RIZAL</span>
             </a>
-            <div class="hidden md:flex gap-8 font-semibold text-sm text-slate-300">
-                <button onclick="goToSlide(0)" class="hover:text-sky-400 transition">Beranda</button>
-                <button onclick="goToSlide(1)" class="hover:text-sky-400 transition">Tentang</button>
-                <button onclick="goToSlide(2)" class="hover:text-sky-400 transition">Prestasi</button>
-                <button onclick="goToSlide(3)" class="hover:text-sky-400 transition">Tools & Senjata</button>
-                <button onclick="goToSlide(4)" class="hover:text-sky-400 transition">Kontak</button>
+            <div class="hidden md:flex gap-6 font-semibold text-sm text-slate-300">
+                <a href="#hero" class="hover:text-sky-400 transition">Beranda</a>
+                <a href="#about" class="hover:text-sky-400 transition">Tentang</a>
+                <a href="#achievements" class="hover:text-sky-400 transition">Prestasi</a>
+                <a href="#tools" class="hover:text-sky-400 transition">Tools</a>
+                <a href="#contact" class="hover:text-sky-400 transition">Kontak</a>
             </div>
-            <button onclick="goToSlide(4)" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold text-sm shadow-lg shadow-sky-500/30 hover:scale-105 transition duration-300">
+            <a href="#contact" class="px-5 py-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold text-xs sm:text-sm shadow-lg shadow-sky-500/30 hover:scale-105 transition duration-300">
                 Sapa Saya 👋
-            </button>
+            </a>
         </div>
     </nav>
 
-    <!-- NAVIGATOR SLIDER KIRI & KANAN -->
-    <button onclick="prevSlide()" class="fixed left-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full glass-panel text-sky-400 hover:bg-sky-500 hover:text-white flex items-center justify-center transition duration-300 shadow-2xl">
-        <i class="fa-solid fa-chevron-left text-xl"></i>
-    </button>
-    <button onclick="nextSlide()" class="fixed right-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full glass-panel text-sky-400 hover:bg-sky-500 hover:text-white flex items-center justify-center transition duration-300 shadow-2xl">
-        <i class="fa-solid fa-chevron-right text-xl"></i>
-    </button>
+    <!-- KONTEN UTAMA (SCROLL KE BAWAH) -->
+    <main class="relative z-20 space-y-24 sm:space-y-32 pt-28 pb-20">
 
-    <!-- SLIDER WRAPPER UTAMA -->
-    <main class="pt-36 pb-24 relative z-20">
-        <div class="slide-container" id="slide-wrapper">
-
-            <!-- SLIDE 1: HERO SECTION -->
-            <section class="slide-item active-slide px-4 flex items-center justify-center">
-                <div class="max-w-6xl mx-auto grid md:grid-cols-12 gap-12 items-center w-full">
-                    <div class="md:col-span-7 space-y-6 text-center md:text-left">
-                        <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bsi-badge text-amber-300 text-sm font-bold">
-                            <i class="fa-solid fa-award text-amber-400 text-lg"></i>
-                            BSI Scholar 2026
-                        </div>
-                        
-                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black uppercase leading-tight tracking-tight neon-title">
-                            BERINOVASI LEWAT TEKNOLOGI,<br>
-                            BERPRESTASI LEWAT AKSI
-                        </h1>
-                        
-                        <p class="text-slate-300 text-base sm:text-lg leading-relaxed font-medium max-w-2xl">
-                            Hai, Saya <strong class="text-sky-400">Fah Rizal</strong>! Inovator di bidang Robotika & Otomasi, Atlet Badminton Nasional, serta Penerima Beasiswa BSI 2026 berbasis di Tangerang, Banten.
-                        </p>
-
-                        <div class="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
-                            <button onclick="goToSlide(2)" class="px-8 py-4 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-extrabold shadow-xl shadow-sky-500/30 hover:scale-105 transition flex items-center gap-3">
-                                <i class="fa-solid fa-trophy"></i> Lihat 6 Prestasi Utama
-                            </button>
-                            <button onclick="goToSlide(4)" class="px-8 py-4 rounded-xl glass-panel text-slate-200 font-extrabold hover:bg-slate-800 transition flex items-center gap-3 border border-sky-500/30">
-                                <i class="fa-solid fa-paper-plane"></i> Kirim Pesan
-                            </button>
-                        </div>
+        <!-- HERO SECTION -->
+        <section id="hero" class="px-4 min-h-[85vh] flex items-center">
+            <div class="max-w-6xl mx-auto grid md:grid-cols-12 gap-10 items-center w-full">
+                <div class="md:col-span-7 space-y-6 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bsi-badge text-amber-300 text-xs sm:text-sm font-bold">
+                        <i class="fa-solid fa-award text-amber-400 text-base"></i>
+                        BSI Scholar 2026
                     </div>
-
-                    <div class="md:col-span-5 flex justify-center">
-                        <div class="relative w-72 h-80 sm:w-80 sm:h-[26rem]">
-                            <div class="absolute inset-0 bg-gradient-to-tr from-sky-500 via-indigo-500 to-purple-600 rounded-3xl rotate-6 blur-2xl opacity-50 animate-pulse"></div>
-                            <div class="relative w-full h-full glass-panel rounded-3xl p-3 border-2 border-sky-400/50 shadow-2xl overflow-hidden flex flex-col justify-between">
-                                <div class="relative w-full h-full rounded-2xl overflow-hidden bg-slate-900 flex items-center justify-center">
-                                    <img src="profil.jpg" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80'" alt="Fah Rizal" class="w-full h-full object-contain">
-                                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-4 text-white">
-                                        <h3 class="font-extrabold text-lg flex items-center gap-2">
-                                            Fah Rizal <i class="fa-solid fa-circle-check text-sky-400 text-sm"></i>
-                                        </h3>
-                                        <p class="text-xs text-sky-300 flex items-center gap-1">
-                                            <i class="fa-solid fa-location-dot text-amber-400"></i> Tangerang, Banten
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SLIDE 2: TENTANG (PILAR UTAMA) -->
-            <section class="slide-item px-4 flex items-center justify-center">
-                <div class="max-w-6xl mx-auto w-full">
-                    <div class="text-center space-y-3 mb-12">
-                        <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-400 bg-sky-500/10 px-4 py-1.5 rounded-full inline-block border border-sky-400/30">Mengenal Fah Rizal</h2>
-                        <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Tiga Pilar Utama</h3>
-                    </div>
-                    <div class="grid md:grid-cols-3 gap-6">
-                        <div class="glass-panel p-8 rounded-3xl glass-card-hover">
-                            <div class="w-14 h-14 rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-2xl mb-6 shadow-lg">
-                                <i class="fa-solid fa-microchip"></i>
-                            </div>
-                            <h3 class="text-xl font-extrabold text-white mb-2">Robotik & Inovasi</h3>
-                            <p class="text-slate-300 text-sm leading-relaxed font-medium">
-                                Merancang hardware, C++, pemrograman mikrokontroler, serta algoritma line follower & robot inovasi tingkat nasional.
-                            </p>
-                        </div>
-
-                        <div class="glass-panel p-8 rounded-3xl glass-card-hover">
-                            <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-400 text-indigo-400 flex items-center justify-center text-2xl mb-6 shadow-lg">
-                                <i class="fa-solid fa-table-tennis-paddle-ball"></i>
-                            </div>
-                            <h3 class="text-xl font-extrabold text-white mb-2">Badminton</h3>
-                            <p class="text-slate-300 text-sm leading-relaxed font-medium">
-                                Mengasah ketangkasan, fokus, dan mental juara di lapangan hingga meraih podium 3 Tingkat Nasional.
-                            </p>
-                        </div>
-
-                        <div class="glass-panel p-8 rounded-3xl glass-card-hover">
-                            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400 text-amber-400 flex items-center justify-center text-2xl mb-6 shadow-lg">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                            </div>
-                            <h3 class="text-xl font-extrabold text-white mb-2">BSI Scholar 2026</h3>
-                            <p class="text-slate-300 text-sm leading-relaxed font-medium">
-                                Penerima BSI Scholarship Awardee 2026 yang aktif berdedikasi tinggi, berintegritas, dan berkontribusi nyata.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SLIDE 3: PRESTASI FAH RIZAL -->
-            <section class="slide-item px-4 flex items-center justify-center">
-                <div class="max-w-6xl mx-auto w-full">
-                    <div class="text-center space-y-3 mb-10">
-                        <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-400 bg-sky-500/10 px-4 py-1.5 rounded-full inline-block border border-sky-400/30">Rekam Jejak & Kejuaraan</h2>
-                        <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Prestasi Fah Rizal</h3>
-                        <p class="text-slate-400 text-sm sm:text-base max-w-lg mx-auto">Klik pada kartu untuk melihat detail dokumentasi foto & sertifikat resmi.</p>
-                    </div>
-
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="achievement-grid">
-                        <!-- Cards generated via JS -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- SLIDE 4: TOOLS & SENJATA (BANYAK) -->
-            <section class="slide-item px-4 flex items-center justify-center">
-                <div class="max-w-6xl mx-auto w-full space-y-10">
-                    <div class="text-center space-y-3">
-                        <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-400 bg-sky-500/10 px-4 py-1.5 rounded-full inline-block border border-sky-400/30">Keahlian & Perlengkapan</h2>
-                        <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Tools & Senjata Utama</h3>
-                    </div>
-
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-solid fa-code text-sky-400 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">C++</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-brands fa-python text-blue-400 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">Python AI</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-solid fa-microchip text-emerald-400 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">Arduino</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-solid fa-wifi text-amber-400 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">ESP32 IoT</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-solid fa-gear text-purple-400 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">ROS</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-solid fa-eye text-red-400 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">OpenCV</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-brands fa-raspberry-pi text-pink-500 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">Raspberry Pi</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-solid fa-memory text-cyan-400 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">STM32</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-solid fa-chart-line text-indigo-400 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">MATLAB</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-solid fa-cube text-emerald-300 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">SolidWorks</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-solid fa-bolt text-yellow-400 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">Eagle PCB</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-brands fa-github text-slate-300 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">Git/GitHub</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-brands fa-linux text-orange-400 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">Linux CLI</span>
-                        </div>
-                        <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
-                            <i class="fa-solid fa-sliders text-teal-400 text-3xl mb-3 block"></i>
-                            <span class="text-xs font-bold text-slate-200">PlatformIO</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SLIDE 5: KONTAK & FITUR DETEKSI PENGUNJUNG -->
-            <section class="slide-item px-4 flex items-center justify-center">
-                <div class="max-w-4xl mx-auto space-y-6 w-full">
                     
-                    <!-- WIDGET DETEKSI PENGUNJUNG -->
-                    <div class="glass-panel p-6 rounded-3xl border border-sky-400/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
-                        <div class="flex items-center gap-4 text-center sm:text-left">
-                            <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-xl shrink-0">
-                                <i class="fa-solid fa-fingerprint"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-white font-extrabold text-sm sm:text-base">Deteksi Perangkat Pengunjung</h4>
-                                <p id="visitor-info" class="text-xs text-slate-300 font-medium">Menganalisis sistem & jaringan Anda...</p>
-                            </div>
-                        </div>
-                        <div class="px-4 py-2 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 text-xs font-extrabold tracking-widest uppercase">
-                            Status: Online 🟢
-                        </div>
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black uppercase leading-tight tracking-tight neon-title">
+                        BERINOVASI LEWAT TEKNOLOGI,<br>
+                        BERPRESTASI LEWAT AKSI
+                    </h1>
+                    
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed font-medium max-w-2xl mx-auto md:mx-0">
+                        Hai, Saya <strong class="text-sky-400">Fah Rizal</strong>! Inovator di bidang Robotika & Otomasi, Atlet Badminton Nasional, serta Penerima Beasiswa BSI 2026 berbasis di Tangerang, Banten.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 justify-center md:justify-start pt-2">
+                        <a href="#achievements" class="px-7 py-3.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-extrabold text-sm shadow-xl shadow-sky-500/30 hover:scale-105 transition flex items-center gap-2.5">
+                            <i class="fa-solid fa-trophy"></i> Lihat Prestasi
+                        </a>
+                        <a href="#contact" class="px-7 py-3.5 rounded-xl glass-panel text-slate-200 font-extrabold text-sm hover:bg-slate-800 transition flex items-center gap-2.5 border border-sky-500/30">
+                            <i class="fa-solid fa-paper-plane"></i> Kirim Pesan
+                        </a>
                     </div>
-
-                    <!-- FORM KONTAK -->
-                    <div class="glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden">
-                        <div class="text-center space-y-3 mb-10">
-                            <div class="w-14 h-14 mx-auto rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-2xl shadow-lg">
-                                <i class="fa-solid fa-comments"></i>
-                            </div>
-                            <h3 class="text-3xl font-extrabold text-white">Sapa Fah Rizal</h3>
-                            <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto font-medium">
-                                Kirim pesan langsung ke WhatsApp atau Email saya.
-                            </p>
-                        </div>
-
-                        <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
-                            <div class="grid sm:grid-cols-2 gap-5">
-                                <div>
-                                    <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Nama Anda</label>
-                                    <input type="text" id="sender-name" required placeholder="Masukkan nama Anda" class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Topik Pesan</label>
-                                    <select id="message-topic" class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition">
-                                        <option value="Proyek Robotik" class="bg-slate-900 text-white">Proyek Robotik / Otomasi</option>
-                                        <option value="Badminton" class="bg-slate-900 text-white">Badminton / Pertandingan</option>
-                                        <option value="Diskusi BSI Scholar" class="bg-slate-900 text-white">Diskusi BSI Scholarship</option>
-                                        <option value="Lainnya" class="bg-slate-900 text-white">Lainnya</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Isi Pesan</label>
-                                <textarea id="sender-message" required rows="4" placeholder="Tuliskan pesan Anda di sini..." class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition"></textarea>
-                            </div>
-                            
-                            <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                                <button type="submit" name="channel" value="wa" class="flex-1 py-4 rounded-xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 hover:scale-105 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
-                                    <i class="fa-brands fa-whatsapp text-xl"></i> Kirim via WhatsApp
-                                </button>
-                                <button type="submit" name="channel" value="email" class="flex-1 py-4 rounded-xl bg-sky-600 text-white font-bold text-sm hover:bg-sky-700 hover:scale-105 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-sky-600/20">
-                                    <i class="fa-solid fa-envelope text-xl"></i> Kirim via Email
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
                 </div>
-            </section>
 
-        </div>
+                <div class="md:col-span-5 flex justify-center">
+                    <div class="relative w-64 h-72 sm:w-80 sm:h-[26rem]">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-sky-500 via-indigo-500 to-purple-600 rounded-3xl rotate-6 blur-2xl opacity-50 animate-pulse"></div>
+                        <div class="relative w-full h-full glass-panel rounded-3xl p-3 border-2 border-sky-400/50 shadow-2xl overflow-hidden flex flex-col justify-between">
+                            <div class="relative w-full h-full rounded-2xl overflow-hidden bg-slate-900 flex items-center justify-center">
+                                <img src="profil.jpg" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80'" alt="Fah Rizal" class="w-full h-full object-contain">
+                                <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-4 text-white">
+                                    <h3 class="font-extrabold text-base flex items-center gap-2">
+                                        Fah Rizal <i class="fa-solid fa-circle-check text-sky-400 text-xs"></i>
+                                    </h3>
+                                    <p class="text-xs text-sky-300 flex items-center gap-1">
+                                        <i class="fa-solid fa-location-dot text-amber-400"></i> Tangerang, Banten
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TENTANG (PILAR UTAMA) -->
+        <section id="about" class="px-4">
+            <div class="max-w-6xl mx-auto w-full">
+                <div class="text-center space-y-3 mb-12">
+                    <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-400 bg-sky-500/10 px-4 py-1.5 rounded-full inline-block border border-sky-400/30">Mengenal Fah Rizal</h2>
+                    <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Tiga Pilar Utama</h3>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="glass-panel p-6 sm:p-8 rounded-3xl glass-card-hover">
+                        <div class="w-14 h-14 rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-2xl mb-6 shadow-lg">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-white mb-2">Robotik & Inovasi</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed font-medium">
+                            Merancang hardware, C++, pemrograman mikrokontroler, serta algoritma line follower & robot inovasi tingkat nasional.
+                        </p>
+                    </div>
+
+                    <div class="glass-panel p-6 sm:p-8 rounded-3xl glass-card-hover">
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-400 text-indigo-400 flex items-center justify-center text-2xl mb-6 shadow-lg">
+                            <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-white mb-2">Badminton</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed font-medium">
+                            Mengasah ketangkasan, fokus, dan mental juara di lapangan hingga meraih podium 3 Tingkat Nasional.
+                        </p>
+                    </div>
+
+                    <div class="glass-panel p-6 sm:p-8 rounded-3xl glass-card-hover">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400 text-amber-400 flex items-center justify-center text-2xl mb-6 shadow-lg">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-white mb-2">BSI Scholar 2026</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed font-medium">
+                            Penerima BSI Scholarship Awardee 2026 yang aktif berdedikasi tinggi, berintegritas, dan berkontribusi nyata.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRESTASI FAH RIZAL -->
+        <section id="achievements" class="px-4">
+            <div class="max-w-6xl mx-auto w-full">
+                <div class="text-center space-y-3 mb-10">
+                    <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-400 bg-sky-500/10 px-4 py-1.5 rounded-full inline-block border border-sky-400/30">Rekam Jejak & Kejuaraan</h2>
+                    <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Prestasi Fah Rizal</h3>
+                    <p class="text-slate-400 text-sm sm:text-base max-w-lg mx-auto">Klik pada kartu untuk melihat detail dokumentasi foto & sertifikat resmi.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="achievement-grid">
+                    <!-- Cards generated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TOOLS & SENJATA -->
+        <section id="tools" class="px-4">
+            <div class="max-w-6xl mx-auto w-full space-y-10">
+                <div class="text-center space-y-3">
+                    <h2 class="text-xs font-extrabold uppercase tracking-widest text-sky-400 bg-sky-500/10 px-4 py-1.5 rounded-full inline-block border border-sky-400/30">Keahlian & Perlengkapan</h2>
+                    <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Tools & Senjata Utama</h3>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-solid fa-code text-sky-400 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">C++</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-brands fa-python text-blue-400 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">Python AI</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-solid fa-microchip text-emerald-400 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">Arduino</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-solid fa-wifi text-amber-400 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">ESP32 IoT</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-solid fa-gear text-purple-400 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">ROS</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-solid fa-eye text-red-400 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">OpenCV</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-brands fa-raspberry-pi text-pink-500 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">Raspberry Pi</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-solid fa-memory text-cyan-400 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">STM32</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-solid fa-chart-line text-indigo-400 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">MATLAB</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-solid fa-cube text-emerald-300 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">SolidWorks</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-solid fa-bolt text-yellow-400 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">Eagle PCB</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-brands fa-github text-slate-300 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">Git/GitHub</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-brands fa-linux text-orange-400 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">Linux CLI</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl text-center glass-card-hover">
+                        <i class="fa-solid fa-sliders text-teal-400 text-3xl mb-3 block"></i>
+                        <span class="text-xs font-bold text-slate-200">PlatformIO</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KONTAK & DETEKSI PENGUNJUNG -->
+        <section id="contact" class="px-4">
+            <div class="max-w-4xl mx-auto space-y-6 w-full">
+                
+                <!-- WIDGET DETEKSI PENGUNJUNG -->
+                <div class="glass-panel p-6 rounded-3xl border border-sky-400/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                    <div class="flex items-center gap-4 text-center sm:text-left">
+                        <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-fingerprint"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-extrabold text-sm sm:text-base">Deteksi Perangkat Pengunjung</h4>
+                            <p id="visitor-info" class="text-xs text-slate-300 font-medium">Menganalisis sistem & jaringan Anda...</p>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-300 text-xs font-extrabold tracking-widest uppercase">
+                        Status: Online 🟢
+                    </div>
+                </div>
+
+                <!-- FORM KONTAK -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-12 relative overflow-hidden">
+                    <div class="text-center space-y-3 mb-10">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-sky-500/20 border border-sky-400 text-sky-400 flex items-center justify-center text-2xl shadow-lg">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white">Sapa Fah Rizal</h3>
+                        <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto font-medium">
+                            Kirim pesan langsung ke WhatsApp atau Email saya.
+                        </p>
+                    </div>
+
+                    <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
+                        <div class="grid sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Nama Anda</label>
+                                <input type="text" id="sender-name" required placeholder="Masukkan nama Anda" class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Topik Pesan</label>
+                                <select id="message-topic" class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition">
+                                    <option value="Proyek Robotik" class="bg-slate-900 text-white">Proyek Robotik / Otomasi</option>
+                                    <option value="Badminton" class="bg-slate-900 text-white">Badminton / Pertandingan</option>
+                                    <option value="Diskusi BSI Scholar" class="bg-slate-900 text-white">Diskusi BSI Scholarship</option>
+                                    <option value="Lainnya" class="bg-slate-900 text-white">Lainnya</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-extrabold text-sky-300 uppercase mb-2">Isi Pesan</label>
+                            <textarea id="sender-message" required rows="4" placeholder="Tuliskan pesan Anda di sini..." class="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-sky-500/30 text-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm transition"></textarea>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                            <button type="submit" name="channel" value="wa" class="flex-1 py-4 rounded-xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 hover:scale-105 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+                                <i class="fa-brands fa-whatsapp text-xl"></i> Kirim via WhatsApp
+                            </button>
+                            <button type="submit" name="channel" value="email" class="flex-1 py-4 rounded-xl bg-sky-600 text-white font-bold text-sm hover:bg-sky-700 hover:scale-105 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-sky-600/20">
+                                <i class="fa-solid fa-envelope text-xl"></i> Kirim via Email
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
     </main>
 
-    <!-- SLIDE INDICATORS -->
-    <div class="fixed bottom-12 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 bg-slate-950/80 px-6 py-2.5 rounded-full border border-sky-500/30 backdrop-blur-md">
-        <button onclick="goToSlide(0)" class="slide-dot w-3 h-3 rounded-full bg-sky-400 transition-all"></button>
-        <button onclick="goToSlide(1)" class="slide-dot w-3 h-3 rounded-full bg-slate-600 transition-all"></button>
-        <button onclick="goToSlide(2)" class="slide-dot w-3 h-3 rounded-full bg-slate-600 transition-all"></button>
-        <button onclick="goToSlide(3)" class="slide-dot w-3 h-3 rounded-full bg-slate-600 transition-all"></button>
-        <button onclick="goToSlide(4)" class="slide-dot w-3 h-3 rounded-full bg-slate-600 transition-all"></button>
-    </div>
-
     <!-- TECH MARQUEE BANNER FOOTER -->
-    <div class="fixed bottom-0 left-0 right-0 z-20 py-2 border-t border-sky-500/20 bg-slate-950/80 backdrop-blur-md">
+    <div class="fixed bottom-0 left-0 right-0 z-30 py-2 border-t border-sky-500/20 bg-slate-950/90 backdrop-blur-md">
         <div class="marquee-container">
             <div class="marquee-content font-extrabold text-xs tracking-widest text-sky-300 uppercase space-x-12">
                 <span><i class="fa-solid fa-code text-sky-400"></i> C++ Programming</span>
@@ -478,75 +406,30 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        let currentSlide = 0;
-        const totalSlides = 5;
-
-        // START PORTFOLIO & PLAY MUSIC
-        function startPortfolio() {
-            const splash = document.getElementById('splash-screen');
+        // OTOMATIS PUTAR MUSIK SAAT ADA INTERAKSI PERTAMA
+        function initAutoPlayMusic() {
             const music = document.getElementById('bg-music');
+            if (!music) return;
             
-            splash.classList.add('hidden-splash');
+            music.volume = 0.5;
             
-            if (music) {
-                music.volume = 0.5;
-                music.play().catch(err => console.log("Audio play error:", err));
-            }
+            const startAudioOnInteraction = () => {
+                music.play().catch(e => console.log("Audio play blocked", e));
+                document.removeEventListener('click', startAudioOnInteraction);
+                document.removeEventListener('touchstart', startAudioOnInteraction);
+                document.removeEventListener('scroll', startAudioOnInteraction);
+            };
+
+            document.addEventListener('click', startAudioOnInteraction);
+            document.addEventListener('touchstart', startAudioOnInteraction);
+            document.addEventListener('scroll', startAudioOnInteraction);
         }
-
-        // SLIDER CONTROL
-        function updateSlidePosition() {
-            const wrapper = document.getElementById('slide-wrapper');
-            const slides = document.querySelectorAll('.slide-item');
-            const dots = document.querySelectorAll('.slide-dot');
-
-            wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
-
-            slides.forEach((slide, index) => {
-                if(index === currentSlide) {
-                    slide.classList.add('active-slide');
-                } else {
-                    slide.classList.remove('active-slide');
-                }
-            });
-
-            dots.forEach((dot, index) => {
-                if(index === currentSlide) {
-                    dot.className = "slide-dot w-8 h-3 rounded-full bg-sky-400 transition-all";
-                } else {
-                    dot.className = "slide-dot w-3 h-3 rounded-full bg-slate-600 transition-all";
-                }
-            });
-        }
-
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            updateSlidePosition();
-        }
-
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateSlidePosition();
-        }
-
-        function goToSlide(index) {
-            currentSlide = index;
-            updateSlidePosition();
-        }
-
-        // SWIPE CAROUSEL FOR MOBILE
-        let touchStartX = 0;
-        let touchEndX = 0;
-        document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
-        document.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            if (touchStartX - touchEndX > 50) nextSlide();
-            if (touchEndX - touchStartX > 50) prevSlide();
-        });
 
         // DETEKSI PENGUNJUNG OTOMATIS
         function initVisitorDetection() {
             const visitorEl = document.getElementById('visitor-info');
+            if (!visitorEl) return;
+            
             const ua = navigator.userAgent;
             let os = "Sistem Tidak Dikenal";
             let browser = "Browser Tidak Dikenal";
@@ -566,11 +449,12 @@
             visitorEl.innerHTML = `Perangkat: <strong class="text-sky-400">${os}</strong> | Browser: <strong class="text-sky-400">${browser}</strong> | Resolusi: <strong class="text-sky-400">${screenRes}</strong>`;
         }
 
-        // 3D THREE.JS BACKGROUND (SANGAT RAME)
+        // 3D THREE.JS BACKGROUND
         function init3DBackground() {
             const container = document.getElementById('canvas-container');
+            if (!container) return;
+
             const scene = new THREE.Scene();
-            
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.z = 35;
 
@@ -732,6 +616,8 @@
 
         function renderAchievements() {
             const container = document.getElementById('achievement-grid');
+            if (!container) return;
+
             container.innerHTML = achievementsData.map((item) => `
                 <div onclick="openModal(${item.id})" class="glass-panel p-6 rounded-3xl glass-card-hover cursor-pointer flex flex-col justify-between">
                     <div>
@@ -833,7 +719,7 @@
             init3DBackground();
             renderAchievements();
             initVisitorDetection();
-            updateSlidePosition();
+            initAutoPlayMusic();
         });
     </script>
 </body>
