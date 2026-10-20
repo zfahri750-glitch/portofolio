@@ -112,7 +112,7 @@
         <source src="lagu-natal.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- TOMBOL MUSIK MELAYANG DI POJOK KANAN BAWAH -->
+    <!-- TOMBOL MUSIK MELAYANG POJOK KANAN BAWAH -->
     <button onclick="toggleMusic()" id="music-btn" class="fixed bottom-12 right-5 z-50 w-12 h-12 rounded-full glass-panel border border-sky-400 text-amber-400 flex items-center justify-center text-lg shadow-xl hover:scale-110 transition duration-300">
         <i class="fa-solid fa-music" id="music-icon"></i>
     </button>
@@ -144,7 +144,7 @@
         </div>
     </nav>
 
-    <!-- KONTEN UTAMA (SCROLL KE BAWAH) -->
+    <!-- KONTEN UTAMA (LANGSUNG MASUK TANPA SPLASH SCREEN) -->
     <main class="relative z-20 space-y-24 sm:space-y-32 pt-28 pb-20">
 
         <!-- HERO SECTION -->
@@ -399,7 +399,6 @@
     <script>
         let isPlaying = false;
 
-        // FUNGSI PLAY / PAUSE MUSIK
         function toggleMusic() {
             const music = document.getElementById('bg-music');
             const icon = document.getElementById('music-icon');
@@ -422,7 +421,6 @@
             }
         }
 
-        // OTOMATIS MENYALAKAN MUSIK SAAT LAYAR DIKLIK PERTAMA KALI
         function initAutoPlayMusic() {
             const music = document.getElementById('bg-music');
             if (!music) return;
@@ -446,7 +444,6 @@
             document.addEventListener('touchstart', startOnInteraction);
         }
 
-        // 3D THREE.JS BACKGROUND
         function init3DBackground() {
             const container = document.getElementById('canvas-container');
             if (!container) return;
@@ -529,7 +526,6 @@
             });
         }
 
-        // DATA PRESTASI FAH RIZAL
         const achievementsData = [
             {
                 id: 1,
@@ -689,7 +685,6 @@
             document.getElementById('achievement-modal').classList.remove('active');
         }
 
-        // FORM SUBMIT
         function handleFormSubmit(e) {
             e.preventDefault();
             const name = document.getElementById('sender-name').value;
