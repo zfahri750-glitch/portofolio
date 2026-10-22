@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio - Fah Rizal</title>
+    <title>Portofolio Cyber - Fah Rizal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -32,17 +32,33 @@
             overflow-x: hidden;
         }
 
-        /* CURSOR GLOW TRAIL */
+        /* CURSOR GLOW & PARTICLE TRAIL */
         #cursor-glow {
             position: fixed;
-            width: 350px;
-            height: 350px;
+            width: 320px;
+            height: 320px;
             background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(2, 132, 199, 0) 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 10;
             transform: translate(-50%, -50%);
             transition: transform 0.05s ease-out;
+        }
+
+        .trail-particle {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: #38bdf8;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99;
+            box-shadow: 0 0 10px #38bdf8;
+            animation: fadeParticle 0.6s ease-out forwards;
+        }
+        @keyframes fadeParticle {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.2) translateY(-10px); }
         }
 
         /* 3D CANVAS BACKGROUND */
@@ -158,10 +174,16 @@
         <source src="lagu-natal.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- TOMBOL MUSIK MELAYANG POJOK KANAN BAWAH -->
-    <button onclick="toggleMusic()" id="music-btn" class="fixed bottom-12 right-5 z-50 w-12 h-12 rounded-full glass-panel border border-sky-400 text-amber-400 flex items-center justify-center text-lg shadow-xl hover:scale-110 transition duration-300">
-        <i class="fa-solid fa-music" id="music-icon"></i>
-    </button>
+    <!-- WIDGET MUSIK MELAYANG POJOK KANAN BAWAH -->
+    <div class="fixed bottom-12 right-5 z-50 flex items-center gap-3">
+        <div id="music-title-badge" class="hidden glass-panel px-4 py-2 rounded-full border border-amber-400/50 text-xs text-amber-300 font-bold flex items-center gap-2 shadow-xl animate-fade-in">
+            <i class="fa-solid fa-compact-disc animate-spin text-amber-400"></i>
+            <span>lagu-natal.mp3</span>
+        </div>
+        <button onclick="toggleMusic()" id="music-btn" class="w-12 h-12 rounded-full glass-panel border border-sky-400 text-amber-400 flex items-center justify-center text-lg shadow-xl hover:scale-110 transition duration-300">
+            <i class="fa-solid fa-music" id="music-icon"></i>
+        </button>
+    </div>
 
     <!-- NAVBAR RESPONSIF -->
     <nav class="fixed top-0 left-0 right-0 z-40 px-4 py-4">
@@ -181,6 +203,13 @@
                 <a href="#contact" class="hover:text-sky-400 transition">Kontak</a>
             </div>
             <div class="flex items-center gap-3">
+                <!-- THEME COLOR SWITCHER -->
+                <div class="hidden sm:flex items-center gap-1.5 px-2 py-1 bg-slate-900/80 rounded-full border border-sky-500/30">
+                    <button onclick="changeTheme('#38bdf8')" class="w-4 h-4 rounded-full bg-sky-400 hover:scale-125 transition"></button>
+                    <button onclick="changeTheme('#10b981')" class="w-4 h-4 rounded-full bg-emerald-400 hover:scale-125 transition"></button>
+                    <button onclick="changeTheme('#c084fc')" class="w-4 h-4 rounded-full bg-purple-400 hover:scale-125 transition"></button>
+                </div>
+
                 <!-- MUSIC CONTROLLER & EQUALIZER -->
                 <button onclick="toggleMusic()" class="px-3.5 py-2 rounded-full bg-slate-800 border border-sky-500/30 text-amber-400 font-bold text-xs flex items-center gap-2 hover:bg-slate-700 transition">
                     <div id="equalizer" class="hidden flex items-end gap-0.5 h-4">
@@ -229,9 +258,9 @@
                         <a href="#achievements" class="px-7 py-3.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-extrabold text-sm shadow-xl shadow-sky-500/30 hover:scale-105 transition flex items-center gap-2.5">
                             <i class="fa-solid fa-trophy"></i> Lihat Prestasi
                         </a>
-                        <a href="#contact" class="px-7 py-3.5 rounded-xl glass-panel text-slate-200 font-extrabold text-sm hover:bg-slate-800 transition flex items-center gap-2.5 border border-sky-500/30">
-                            <i class="fa-solid fa-paper-plane"></i> Kirim Pesan
-                        </a>
+                        <button onclick="copyPortfolioLink()" class="px-7 py-3.5 rounded-xl glass-panel text-slate-200 font-extrabold text-sm hover:bg-slate-800 transition flex items-center gap-2.5 border border-sky-500/30">
+                            <i class="fa-solid fa-share-nodes"></i> Salin Link Web
+                        </button>
                     </div>
                 </div>
 
@@ -508,14 +537,38 @@
         let isPlaying = false;
         let currentCategory = 'all';
 
-        // CURSOR GLOW TRAIL
+        // CURSOR GLOW TRAIL & PARTICLE DUST
         const cursorGlow = document.getElementById('cursor-glow');
         document.addEventListener('mousemove', (e) => {
             if (cursorGlow) {
                 cursorGlow.style.left = e.clientX + 'px';
                 cursorGlow.style.top = e.clientY + 'px';
             }
+
+            if (Math.random() < 0.15) {
+                const p = document.createElement('div');
+                p.className = 'trail-particle';
+                p.style.left = e.clientX + 'px';
+                p.style.top = e.clientY + 'px';
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 600);
+            }
         });
+
+        // THEME COLOR SWITCHER
+        function changeTheme(color) {
+            document.querySelectorAll('.neon-title').forEach(el => {
+                el.style.background = `linear-gradient(135deg, ${color} 0%, #818cf8 100%)`;
+                el.style.webkitBackgroundClip = 'text';
+            });
+            document.getElementById('scroll-progress').style.background = color;
+        }
+
+        // COPY LINK FUNCTION
+        function copyPortfolioLink() {
+            navigator.clipboard.writeText(window.location.href);
+            alert("✨ Link Portofolio berhasil disalin!");
+        }
 
         // TYPEWRITER EFFECT
         const words = ["Inovator Robotik", "Atlet Badminton", "BSI Scholar 2026", "Embedded System Dev"];
@@ -554,13 +607,14 @@
             document.getElementById("scroll-progress").style.width = scrolled + "%";
         });
 
-        // MUSIK CONTROLLER WITH EQUALIZER
+        // MUSIK CONTROLLER WITH EQUALIZER & BADGE
         function toggleMusic() {
             const music = document.getElementById('bg-music');
             const icon = document.getElementById('music-icon');
             const navIcon = document.getElementById('nav-music-icon');
             const statusText = document.getElementById('music-status-text');
             const eq = document.getElementById('equalizer');
+            const titleBadge = document.getElementById('music-title-badge');
 
             if (!music) return;
 
@@ -571,6 +625,7 @@
                 if(navIcon) navIcon.className = "fa-solid fa-music";
                 if(statusText) statusText.innerText = "Musik";
                 if(eq) eq.classList.add('hidden');
+                if(titleBadge) titleBadge.classList.add('hidden');
             } else {
                 music.volume = 0.5;
                 music.play().then(() => {
@@ -579,6 +634,7 @@
                     if(navIcon) navIcon.className = "fa-solid fa-volume-high animate-bounce";
                     if(statusText) statusText.innerText = "Mati";
                     if(eq) eq.classList.remove('hidden');
+                    if(titleBadge) titleBadge.classList.remove('hidden');
                 }).catch(e => console.log("Audio Error:", e));
             }
         }
@@ -596,10 +652,12 @@
                         const navIcon = document.getElementById('nav-music-icon');
                         const statusText = document.getElementById('music-status-text');
                         const eq = document.getElementById('equalizer');
+                        const titleBadge = document.getElementById('music-title-badge');
                         if(icon) icon.className = "fa-solid fa-volume-high animate-bounce";
                         if(navIcon) navIcon.className = "fa-solid fa-volume-high animate-bounce";
                         if(statusText) statusText.innerText = "Mati";
                         if(eq) eq.classList.remove('hidden');
+                        if(titleBadge) titleBadge.classList.remove('hidden');
                     }).catch(e => console.log("Blocked:", e));
                 }
                 document.removeEventListener('click', startOnInteraction);
