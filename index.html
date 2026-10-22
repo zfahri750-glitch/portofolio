@@ -35,9 +35,9 @@
         /* CURSOR GLOW TRAIL */
         #cursor-glow {
             position: fixed;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(2, 132, 199, 0) 70%);
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(2, 132, 199, 0) 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 10;
@@ -61,8 +61,8 @@
             position: fixed;
             top: 0;
             left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #38bdf8, #818cf8, #f59e0b);
+            height: 4px;
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #f59e0b, #10b981);
             z-index: 100;
             width: 0%;
             transition: width 0.1s ease-out;
@@ -71,8 +71,8 @@
         /* GLASSMORPHISM MODERN */
         .glass-panel {
             background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(56, 189, 248, 0.3);
             box-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.35);
         }
@@ -94,7 +94,7 @@
             text-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
         }
 
-        /* GOLDEN BSI BADGE GLOW */
+        /* BSI BADGE GLOW */
         .bsi-badge {
             background: rgba(245, 158, 11, 0.15);
             border: 1px solid #f59e0b;
@@ -113,6 +113,21 @@
         @keyframes marquee {
             0% { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
+        }
+
+        /* EQUALIZER ANIMATION FOR MUSIC */
+        .eq-bar {
+            width: 3px;
+            background: #f59e0b;
+            border-radius: 3px;
+            animation: eqBounce 1.2s ease-in-out infinite alternate;
+        }
+        .eq-bar:nth-child(1) { height: 12px; animation-delay: 0.1s; }
+        .eq-bar:nth-child(2) { height: 18px; animation-delay: 0.3s; }
+        .eq-bar:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+        @keyframes eqBounce {
+            0% { height: 4px; }
+            100% { height: 20px; }
         }
 
         /* MODAL ANIMATION */
@@ -166,8 +181,15 @@
                 <a href="#contact" class="hover:text-sky-400 transition">Kontak</a>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="toggleMusic()" class="px-3.5 py-2 rounded-full bg-slate-800 border border-sky-500/30 text-amber-400 font-bold text-xs flex items-center gap-1.5 hover:bg-slate-700 transition">
-                    <i class="fa-solid fa-music"></i> <span id="music-status-text">Musik</span>
+                <!-- MUSIC CONTROLLER & EQUALIZER -->
+                <button onclick="toggleMusic()" class="px-3.5 py-2 rounded-full bg-slate-800 border border-sky-500/30 text-amber-400 font-bold text-xs flex items-center gap-2 hover:bg-slate-700 transition">
+                    <div id="equalizer" class="hidden flex items-end gap-0.5 h-4">
+                        <div class="eq-bar"></div>
+                        <div class="eq-bar"></div>
+                        <div class="eq-bar"></div>
+                    </div>
+                    <i class="fa-solid fa-music" id="nav-music-icon"></i>
+                    <span id="music-status-text">Musik</span>
                 </button>
                 <a href="#contact" class="px-5 py-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold text-xs sm:text-sm shadow-lg shadow-sky-500/30 hover:scale-105 transition duration-300">
                     Sapa Saya 👋
@@ -532,11 +554,13 @@
             document.getElementById("scroll-progress").style.width = scrolled + "%";
         });
 
-        // MUSIK CONTROLLER
+        // MUSIK CONTROLLER WITH EQUALIZER
         function toggleMusic() {
             const music = document.getElementById('bg-music');
             const icon = document.getElementById('music-icon');
+            const navIcon = document.getElementById('nav-music-icon');
             const statusText = document.getElementById('music-status-text');
+            const eq = document.getElementById('equalizer');
 
             if (!music) return;
 
@@ -544,13 +568,17 @@
                 music.pause();
                 isPlaying = false;
                 if(icon) icon.className = "fa-solid fa-music";
+                if(navIcon) navIcon.className = "fa-solid fa-music";
                 if(statusText) statusText.innerText = "Musik";
+                if(eq) eq.classList.add('hidden');
             } else {
                 music.volume = 0.5;
                 music.play().then(() => {
                     isPlaying = true;
                     if(icon) icon.className = "fa-solid fa-volume-high animate-bounce";
+                    if(navIcon) navIcon.className = "fa-solid fa-volume-high animate-bounce";
                     if(statusText) statusText.innerText = "Mati";
+                    if(eq) eq.classList.remove('hidden');
                 }).catch(e => console.log("Audio Error:", e));
             }
         }
@@ -565,9 +593,13 @@
                     music.play().then(() => {
                         isPlaying = true;
                         const icon = document.getElementById('music-icon');
+                        const navIcon = document.getElementById('nav-music-icon');
                         const statusText = document.getElementById('music-status-text');
+                        const eq = document.getElementById('equalizer');
                         if(icon) icon.className = "fa-solid fa-volume-high animate-bounce";
+                        if(navIcon) navIcon.className = "fa-solid fa-volume-high animate-bounce";
                         if(statusText) statusText.innerText = "Mati";
+                        if(eq) eq.classList.remove('hidden');
                     }).catch(e => console.log("Blocked:", e));
                 }
                 document.removeEventListener('click', startOnInteraction);
@@ -578,7 +610,7 @@
             document.addEventListener('touchstart', startOnInteraction);
         }
 
-        // 3D THREE.JS BACKGROUND
+        // 3D THREE.JS BACKGROUND WITH CURSOR REACTION
         function init3DBackground() {
             const container = document.getElementById('canvas-container');
             if (!container) return;
